@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>PivoTrail</title>
+<script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{
+  --bg:#0e1a0e;--s1:#182818;--s2:#213221;--s3:#2c422c;--s4:#374f37;
+  --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.13);
+  --accent:#f0a020;--accent-d:rgba(240,160,32,0.12);--accent-b:#f5c050;
+  --text:#e2ddd0;--text2:#7da07d;--text3:#4d6e4d;
+  --red:#d95555;--green:#55aa55;
+  --r:14px;--rsm:8px;--nav:60px;
+}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,'Segoe UI',sans-serif;font-size:15px;line-height:1.5}
+#root{height:100%;display:flex;flex-direction:column;max-width:460px;margin:0 auto}
+
+/* ── layout ── */
+.header{flex-shrink:0;padding:14px 16px 10px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.header-logo{font-size:22px;font-weight:900;letter-spacing:-0.03em;color:var(--accent);font-family:Impact,'Arial Black',sans-serif;display:flex;align-items:center;gap:6px}
+.header-sub{font-size:12px;color:var(--text2);font-weight:600;letter-spacing:0.06em;text-transform:uppercase}
+.content{flex:1;overflow-y:auto;overflow-x:hidden;padding:14px 14px 10px;-webkit-overflow-scrolling:touch}
+.content::-webkit-scrollbar{width:2px}
+.content::-webkit-scrollbar-thumb{background:var(--s4);border-radius:2px}
+.nav{flex-shrink:0;height:var(--nav);background:var(--s1);border-top:1px solid var(--border);display:flex}
+.nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:var(--text3);background:none;border:none;cursor:pointer;transition:color .15s;padding:0}
+.nav-btn.active{color:var(--accent)}
+.nav-btn svg{width:20px;height:20px}
+.nav-lbl{font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+
+/* ── cards ── */
+.card{background:var(--s1);border:1px solid var(--border);border-radius:var(--r);padding:14px;margin-bottom:12px}
+.section-title{font-size:11px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.08em;margin:16px 0 8px}
+.section-title:first-child{margin-top:0}
+.divider{height:1px;background:var(--border);margin:12px 0}
+
+/* ── avatar ── */
+.av{border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;flex-shrink:0;color:#fff}
+.av-lg{width:40px;height:40px;font-size:15px}
+.av-md{width:32px;height:32px;font-size:12px}
+.av-sm{width:26px;height:26px;font-size:10px}
+
+/* ── inputs ── */
+input[type=text],input[type=number],input[type=date]{background:var(--s2);border:1px solid var(--border);color:var(--text);border-radius:var(--rsm);padding:10px 12px;width:100%;font-size:14px;outline:none;transition:border-color .15s;-webkit-appearance:none}
+input:focus{border-color:var(--accent)}
+input[type=date]{color-scheme:dark}
+
+/* ── buttons ── */
+.btn{padding:10px 18px;border-radius:var(--rsm);font-size:14px;font-weight:700;border:none;cursor:pointer;transition:opacity .15s,transform .1s;display:inline-flex;align-items:center;justify-content:center;gap:6px}
+.btn:active{transform:scale(.97)}
+.btn:disabled{opacity:.35;pointer-events:none}
+.btn-p{background:var(--accent);color:#1a0e00}
+.btn-g{background:var(--s3);color:var(--text);border:1px solid var(--border2)}
+.btn-d{background:transparent;color:var(--red);border:1px solid var(--red);padding:6px 12px;font-size:12px}
+.btn-full{width:100%}
+
+/* ── chips ── */
+.chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:7px}
+.chip{padding:7px 14px;border-radius:20px;font-size:13px;font-weight:600;border:2px solid transparent;cursor:pointer;transition:all .15s;background:var(--s3);color:var(--text2)}
+.chip.sel{color:#fff}
+.chip.buyer-ring{outline:2.5px solid var(--accent);outline-offset:2px}
+
+/* ── stepper ── */
+.stepper{display:flex;align-items:center;border:1px solid var(--border2);border-radius:var(--rsm);overflow:hidden;height:46px}
+.step-btn{width:50px;height:100%;background:var(--s2);color:var(--text);border:none;font-size:22px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .1s;flex-shrink:0}
+.step-btn:active{background:var(--s3)}
+.step-val{flex:1;text-align:center;font-size:19px;font-weight:800;background:var(--s1);color:var(--text);padding:0 8px}
+
+/* ── balance ── */
+.bal-item{display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid var(--border)}
+.bal-item:last-child{border-bottom:none}
+.bal-bar-bg{flex:1;height:5px;background:var(--s3);border-radius:3px;overflow:hidden}
+.bal-bar{height:100%;border-radius:3px;transition:width .5s ease}
+.bal-val{font-size:13px;font-weight:700;min-width:62px;text-align:right}
+.pos{color:var(--green)}.neg{color:var(--red)}.zero{color:var(--text2)}
+
+/* ── settlement ── */
+.settle{display:flex;align-items:center;gap:10px;padding:11px 13px;background:var(--s2);border:1px solid var(--border);border-radius:var(--rsm);margin-bottom:8px}
+.settle-mid{flex:1;font-size:13px;line-height:1.4}
+.settle-amt{font-weight:800;color:var(--accent);font-size:14px}
+.settle-arrow{color:var(--accent)}
+
+/* ── history ── */
+.round-card{background:var(--s1);border:1px solid var(--border);border-radius:var(--r);padding:13px;margin-bottom:10px}
+.round-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:9px}
+.round-beer{font-size:30px;font-weight:900;color:var(--accent);font-family:Impact,'Arial Black',sans-serif;line-height:1}
+.round-meta{font-size:12px;color:var(--text2);margin-top:2px}
+.round-buyer-line{font-size:13px;color:var(--text2);margin-bottom:7px}
+.round-buyer-line b{color:var(--accent)}
+.round-avatars{display:flex;flex-wrap:wrap;gap:4px}
+.round-note{font-size:12px;color:var(--text3);font-style:italic;margin-top:6px}
+
+/* ── stats ── */
+.stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-bottom:14px}
+.stat-box{background:var(--s2);border-radius:var(--rsm);padding:12px 8px;text-align:center}
+.stat-n{font-size:26px;font-weight:900;color:var(--accent);font-family:Impact,'Arial Black',sans-serif;line-height:1}
+.stat-l{font-size:10px;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;margin-top:3px}
+
+/* ── misc ── */
+.add-row{display:flex;gap:8px}
+.cyclist-row{display:flex;align-items:center;gap:11px;padding:10px 0;border-bottom:1px solid var(--border)}
+.cyclist-row:last-child{border-bottom:none}
+.c-name{flex:1;font-weight:600;font-size:14px}
+.del-btn{background:none;border:none;color:var(--text3);cursor:pointer;padding:5px;border-radius:5px;display:flex;align-items:center;justify-content:center;transition:color .15s}
+.del-btn:hover{color:var(--red)}
+.form-lbl{font-size:11px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;display:block}
+.note-text{font-size:12px;color:var(--text2);margin-top:6px;font-style:italic}
+.empty-state{text-align:center;padding:50px 20px;color:var(--text2)}
+.empty-icon{font-size:52px;margin-bottom:12px}
+.empty-state p{font-size:14px;line-height:1.6}
+.preview-box{background:var(--accent-d);border:1px solid rgba(240,160,32,.25);border-radius:var(--rsm);padding:12px 14px;margin:14px 0;font-size:13px;color:var(--text2);line-height:1.6}
+.preview-box b{color:var(--accent)}
+.toast{position:fixed;top:14px;left:50%;transform:translateX(-50%);background:var(--green);color:#0a1f0a;padding:9px 20px;border-radius:20px;font-weight:700;font-size:13px;z-index:999;white-space:nowrap;animation:fadeIn .2s ease;box-shadow:0 4px 20px rgba(0,0,0,.4)}
+.top-buyer-badge{display:inline-flex;align-items:center;gap:6px;background:var(--accent-d);border:1px solid rgba(240,160,32,.25);padding:5px 11px;border-radius:20px;font-size:12px;color:var(--accent);font-weight:700;margin-bottom:4px}
+@keyframes fadeIn{from{opacity:0;transform:translateX(-50%) translateY(-6px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+.fade{animation:tabFade .2s ease}
+@keyframes tabFade{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const {useState,useEffect,useRef,useCallback}=React;
+
+// ── constants ──────────────────────────────────────────────────────────────
+const COLORS=['#e05555','#4a8fe0','#58aa58','#d97c10','#9b50c8','#1aa890','#d45580','#4ab0c8','#c87850','#7070d4'];
+const LS_CFG='pivotrail:cfg';
+
+// ── settings helpers ────────────────────────────────────────────────────────
+function getCfg(){
+  try{
+    const h=location.hash.slice(1);
+    if(h){const p=new URLSearchParams(h);const k=p.get('k'),b=p.get('b');
+      if(k&&b){const c={apiKey:k,binId:b};localStorage.setItem(LS_CFG,JSON.stringify(c));history.replaceState(null,'',location.pathname+location.search);return c;}}
+  }catch{}
+  try{return JSON.parse(localStorage.getItem(LS_CFG)||'{}')}catch{return {}}
+}
+function saveCfg(c){localStorage.setItem(LS_CFG,JSON.stringify(c))}
+function shareUrl(cfg){return location.origin+location.pathname+'#k='+encodeURIComponent(cfg.apiKey)+'&b='+encodeURIComponent(cfg.binId)}
+
+// ── JSONBin API ─────────────────────────────────────────────────────────────
+const BIN_BASE='https://api.jsonbin.io/v3/b';
+async function binLoad(apiKey,binId){
+  const r=await fetch(`${BIN_BASE}/${binId}/latest`,{headers:{'X-Master-Key':apiKey,'X-Bin-Meta':'false'}});
+  if(!r.ok)throw new Error(`Chyba ${r.status}`);
+  return await r.json();
+}
+async function binSave(apiKey,binId,data){
+  const r=await fetch(`${BIN_BASE}/${binId}`,{method:'PUT',headers:{'Content-Type':'application/json','X-Master-Key':apiKey},body:JSON.stringify(data)});
+  if(!r.ok)throw new Error(`Chyba ${r.status}`);
+}
+async function binCreate(apiKey){
+  const r=await fetch(BIN_BASE,{method:'POST',headers:{'Content-Type':'application/json','X-Master-Key':apiKey,'X-Bin-Name':'PivoTrail','X-Bin-Private':'false'},body:JSON.stringify({cyclists:[],rounds:[]})});
+  if(!r.ok)throw new Error(`Chyba ${r.status} — zkontroluj API klíč`);
+  const d=await r.json();
+  return d.metadata.id;
+}
+
+// ── utils ──────────────────────────────────────────────────────────────────
+const uid=()=>Math.random().toString(36).slice(2,9);
+const ini=n=>n.trim().split(/\s+/).map(w=>w[0]).slice(0,2).join('').toUpperCase();
+const today=()=>new Date().toISOString().slice(0,10);
+const fmtDate=iso=>{
+  const d=new Date(iso+'T12:00:00');
+  return d.toLocaleDateString('cs-CZ',{day:'numeric',month:'short',year:'numeric'});
+};
+const beerWord=n=>n===1?'pivo':n<5?'piva':'piv';
+
+// ── balance logic ──────────────────────────────────────────────────────────
+function calcBalances(cyclists,rounds){
+  const b={};
+  cyclists.forEach(c=>b[c.id]=0);
+  rounds.forEach(r=>{
+    const n=r.participants.length;
+    if(!n)return;
+    const pp=r.beerCount/n;
+    r.participants.forEach(pid=>{
+      b[pid]=(b[pid]||0)+(pid===r.buyer?r.beerCount-pp:-pp);
+    });
+  });
+  return b;
+}
+
+function calcSettlements(balances,cyclists){
+  const eps=0.005;
+  const cre=[];const deb=[];
+  cyclists.forEach(c=>{
+    const v=balances[c.id]||0;
+    if(v>eps)cre.push({...c,v});
+    else if(v<-eps)deb.push({...c,v});
+  });
+  cre.sort((a,b)=>b.v-a.v);deb.sort((a,b)=>a.v-b.v);
+  const res=[];
+  let ci=0,di=0;
+  const C=cre.map(c=>({...c}));const D=deb.map(d=>({...d}));
+  while(ci<C.length&&di<D.length){
+    const c=C[ci],d=D[di];
+    const amt=Math.min(c.v,-d.v);
+    if(amt>eps)res.push({from:d,to:c,amt});
+    c.v-=amt;d.v+=amt;
+    if(c.v<eps)ci++;
+    if(d.v>-eps)di++;
+  }
+  return res;
+}
+
+// ── icons ──────────────────────────────────────────────────────────────────
+const IcoUsers=()=><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>;
+const IcoBeer=()=><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 11h1a3 3 0 0 1 0 6h-1"/><path d="M9 12v6"/><path d="M13 12v6"/><path d="M14 7.5c-1 0-1.44.5-3 .5s-2-.5-3-.5-1.44.5-3 .5"/><path d="M5 8v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V8"/><path d="M5 8c0-2 1-2 1-4h10c0 2 1 2 1 4"/></svg>;
+const IcoChart=()=><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/><line x1="2" y1="20" x2="22" y2="20"/></svg>;
+const IcoList=()=><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><circle cx="3" cy="6" r="1" fill="currentColor"/><circle cx="3" cy="12" r="1" fill="currentColor"/><circle cx="3" cy="18" r="1" fill="currentColor"/></svg>;
+const IcoTrash=({sz=15})=><svg width={sz} height={sz} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>;
+const IcoArrow=()=><svg width={18} height={18} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>;
+const IcoCheck=()=><svg width={16} height={16} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round"><polyline points="20 6 9 17 4 12"/></svg>;
+const IcoGear=()=><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>;
+const IcoSync=()=><svg width={16} height={16} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>;
+
+// ── Avatar ─────────────────────────────────────────────────────────────────
+const Av=({c,size='md'})=>{
+  const cls=size==='lg'?'av av-lg':size==='sm'?'av av-sm':'av av-md';
+  return <div className={cls} style={{background:c.color}}>{ini(c.name)}</div>;
+};
+
+// ── PartaTab ───────────────────────────────────────────────────────────────
+function PartaTab({cyclists,onChange}){
+  const [name,setName]=useState('');
+  const add=()=>{
+    const n=name.trim();
+    if(!n)return;
+    onChange([...cyclists,{id:uid(),name:n,color:COLORS[cyclists.length%COLORS.length]}]);
+    setName('');
+  };
+  const remove=id=>{
+    if(confirm('Odebrat cyklistu?'))onChange(cyclists.filter(c=>c.id!==id));
+  };
+  const pWord=n=>n===1?'cyklista':n<5?'cyklisté':'cyklistů';
+  return(
+    <div className="fade">
+      <div className="section-title">Přidat cyklistu</div>
+      <div className="card">
+        <div className="add-row">
+          <input type="text" placeholder="Jméno…" value={name} maxLength={30}
+            onChange={e=>setName(e.target.value)}
+            onKeyDown={e=>e.key==='Enter'&&add()} />
+          <button className="btn btn-p" onClick={add} disabled={!name.trim()} style={{padding:'10px 16px',fontSize:20}}>+</button>
+        </div>
+      </div>
+
+      <div className="section-title">{cyclists.length} {pWord(cyclists.length)}</div>
+      {cyclists.length===0?(
+        <div className="empty-state"><div className="empty-icon">🚴</div><p>Zatím žádní cyklisté.<br/>Přidej partu!</p></div>
+      ):(
+        <div className="card">
+          {cyclists.map((c,i)=>(
+            <div key={c.id} className="cyclist-row">
+              <Av c={c} size="lg"/>
+              <span className="c-name">{c.name}</span>
+              <button className="del-btn" onClick={()=>remove(c.id)}><IcoTrash/></button>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ── RundaTab ───────────────────────────────────────────────────────────────
+function RundaTab({cyclists,onAdd}){
+  const [parts,setParts]=useState([]);
+  const [buyer,setBuyer]=useState(null);
+  const [beers,setBeers]=useState(4);
+  const [date,setDate]=useState(today());
+  const [note,setNote]=useState('');
+
+  const toggle=id=>{
+    if(parts.includes(id)){
+      const np=parts.filter(p=>p!==id);
+      setParts(np);
+      if(buyer===id)setBuyer(np[0]||null);
+    } else {
+      const np=[...parts,id];
+      setParts(np);
+      if(!buyer)setBuyer(id);
+    }
+  };
+
+  const canGo=parts.length>=2&&buyer&&beers>0;
+  const perPerson=parts.length>0?(beers/parts.length):0;
+  const buyerObj=cyclists.find(c=>c.id===buyer);
+
+  const submit=()=>{
+    if(!canGo)return;
+    onAdd({id:uid(),date,participants:parts,buyer,beerCount:beers,note:note.trim()});
+    setParts([]);setBuyer(null);setBeers(4);setNote('');setDate(today());
+  };
+
+  if(cyclists.length<2)return(
+    <div className="empty-state fade"><div className="empty-icon">👥</div><p>Přidej alespoň 2 cyklisty<br/>v záložce Parta.</p></div>
+  );
+
+  return(
+    <div className="fade">
+      <div className="form-lbl">Datum výletu</div>
+      <input type="date" value={date} onChange={e=>setDate(e.target.value)} style={{marginBottom:14}}/>
+
+      <div className="form-lbl">Kdo jel? <span style={{color:'var(--text3)',fontWeight:400,textTransform:'none',letterSpacing:0}}>({parts.length} vybráno)</span></div>
+      <div className="chips" style={{marginBottom:14}}>
+        {cyclists.map(c=>(
+          <button key={c.id} className={`chip${parts.includes(c.id)?' sel':''}`}
+            style={parts.includes(c.id)?{background:c.color}:{}}
+            onClick={()=>toggle(c.id)}>{c.name}</button>
+        ))}
+      </div>
+
+      {parts.length>=2&&<>
+        <div className="form-lbl">Kdo platil? <span style={{color:'var(--text3)',fontWeight:400,textTransform:'none',letterSpacing:0}}>(klikni na jméno)</span></div>
+        <div className="chips" style={{marginBottom:14}}>
+          {parts.map(pid=>{
+            const c=cyclists.find(x=>x.id===pid);if(!c)return null;
+            const isBuyer=buyer===pid;
+            return(
+              <button key={pid}
+                className={`chip${isBuyer?' sel buyer-ring':''}`}
+                style={isBuyer?{background:c.color}:{}}
+                onClick={()=>setBuyer(pid)}>
+                {isBuyer&&<IcoCheck/>}{c.name}
+              </button>
+            );
+          })}
+        </div>
+
+        <div className="form-lbl">Počet koupených piv</div>
+        <div className="stepper" style={{marginBottom:6}}>
+          <button className="step-btn" onClick={()=>setBeers(b=>Math.max(1,b-1))}>−</button>
+          <div className="step-val">🍺 {beers}</div>
+          <button className="step-btn" onClick={()=>setBeers(b=>b+1)}>+</button>
+        </div>
+        {parts.length>=2&&<div className="note-text" style={{marginBottom:14}}>
+          = {perPerson.toFixed(2)} piva na osobu při {parts.length} cyklistech
+        </div>}
+
+        <div className="form-lbl">Poznámka <span style={{color:'var(--text3)',fontWeight:400,textTransform:'none',letterSpacing:0}}>(volitelné)</span></div>
+        <input type="text" placeholder="Kde jsme se stavili…" value={note}
+          onChange={e=>setNote(e.target.value)} style={{marginBottom:14}}/>
+
+        {buyer&&(
+          <div className="preview-box">
+            <b>{buyerObj?.name}</b> koupil {beers} {beerWord(beers)} pro {parts.length} {parts.length===1?'cyklistu':parts.length<5?'cyklisty':'cyklistů'}.<br/>
+            Každý z ostatních mu dluží <b>{perPerson.toFixed(2)}</b> piva.
+          </div>
+        )}
+
+        <button className="btn btn-p btn-full" onClick={submit} disabled={!canGo}>
+          Zapsat rundu ✓
+        </button>
+      </>}
+    </div>
+  );
+}
+
+// ── BilanceTab ─────────────────────────────────────────────────────────────
+function BilanceTab({cyclists,rounds}){
+  if(!cyclists.length)return(
+    <div className="empty-state fade"><div className="empty-icon">📊</div><p>Zatím žádná data.</p></div>
+  );
+
+  const bal=calcBalances(cyclists,rounds);
+  const sets=calcSettlements(bal,cyclists);
+  const maxAbs=Math.max(...cyclists.map(c=>Math.abs(bal[c.id]||0)),.1);
+
+  const totalBeers=rounds.reduce((s,r)=>s+r.beerCount,0);
+  const buyCount={};
+  rounds.forEach(r=>{buyCount[r.buyer]=(buyCount[r.buyer]||0)+1});
+  const topBuyerId=Object.keys(buyCount).sort((a,b)=>buyCount[b]-buyCount[a])[0];
+  const topBuyer=cyclists.find(c=>c.id===topBuyerId);
+
+  const sorted=[...cyclists].sort((a,b)=>(bal[b.id]||0)-(bal[a.id]||0));
+
+  return(
+    <div className="fade">
+      <div className="stats-grid">
+        <div className="stat-box"><div className="stat-n">{totalBeers}</div><div className="stat-l">Piv celkem</div></div>
+        <div className="stat-box"><div className="stat-n">{rounds.length}</div><div className="stat-l">Rund</div></div>
+        <div className="stat-box"><div className="stat-n">{cyclists.length}</div><div className="stat-l">Cyklistů</div></div>
+      </div>
+
+      {topBuyer&&rounds.length>0&&(
+        <div style={{marginBottom:14}}>
+          <div className="top-buyer-badge">
+            <Av c={topBuyer} size="sm"/>
+            🏆 Nejvíce kol: {topBuyer.name} ({buyCount[topBuyerId]}×)
+          </div>
+        </div>
+      )}
+
+      <div className="section-title">Přehled bilancí</div>
+      <div className="card" style={{paddingBottom:4}}>
+        {sorted.map(c=>{
+          const v=bal[c.id]||0;
+          const pos=v>0.005,neg=v<-0.005;
+          const w=Math.abs(v)/maxAbs*100;
+          return(
+            <div key={c.id} className="bal-item">
+              <Av c={c} size="sm"/>
+              <span style={{fontSize:13,fontWeight:600,minWidth:65,flexShrink:0}}>{c.name}</span>
+              <div className="bal-bar-bg">
+                <div className="bal-bar" style={{width:`${w}%`,background:pos?'var(--green)':neg?'var(--red)':'var(--s4)'}}/>
+              </div>
+              <span className={`bal-val ${pos?'pos':neg?'neg':'zero'}`}>
+                {pos?'+':''}{v.toFixed(1)} 🍺
+              </span>
+            </div>
+          );
+        })}
+      </div>
+
+      {sets.length>0&&<>
+        <div className="section-title">Jak to vyrovnat</div>
+        {sets.map((s,i)=>(
+          <div key={i} className="settle">
+            <Av c={s.from} size="sm"/>
+            <div className="settle-arrow"><IcoArrow/></div>
+            <div className="settle-mid">
+              <b>{s.from.name}</b> dluží <b>{s.to.name}</b><br/>
+              <span className="settle-amt">{s.amt.toFixed(2)} 🍺 {beerWord(Math.ceil(s.amt))}</span>
+            </div>
+            <Av c={s.to} size="sm"/>
+          </div>
+        ))}
+      </>}
+
+      {sets.length===0&&rounds.length>0&&(
+        <div className="card" style={{textAlign:'center',color:'var(--green)',fontWeight:700,fontSize:15}}>
+          🎉 Vše vyrovnáno!
+        </div>
+      )}
+
+      {rounds.length===0&&(
+        <div className="empty-state" style={{paddingTop:20}}>
+          <div className="empty-icon">🍺</div>
+          <p>Zatím žádné rundy.<br/>Přidej první kolo!</p>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ── HistorieTab ────────────────────────────────────────────────────────────
+function HistorieTab({cyclists,rounds,onDelete}){
+  if(!rounds.length)return(
+    <div className="empty-state fade"><div className="empty-icon">🍺</div><p>Zatím žádné rundy.<br/>Jdi na výlet!</p></div>
+  );
+
+  const sorted=[...rounds].sort((a,b)=>new Date(b.date)-new Date(a.date));
+
+  return(
+    <div className="fade">
+      <div className="section-title">{rounds.length} {rounds.length===1?'runda':rounds.length<5?'rundy':'rund'}</div>
+      {sorted.map(r=>{
+        const buyObj=cyclists.find(c=>c.id===r.buyer);
+        const pObjs=r.participants.map(pid=>cyclists.find(c=>c.id===pid)).filter(Boolean);
+        const pp=r.beerCount/r.participants.length;
+        return(
+          <div key={r.id} className="round-card">
+            <div className="round-top">
+              <div>
+                <div className="round-beer">{r.beerCount} 🍺</div>
+                <div className="round-meta">{fmtDate(r.date)} &middot; {r.participants.length} {r.participants.length===1?'cyklista':r.participants.length<5?'cyklisté':'cyklistů'}</div>
+              </div>
+              <button className="del-btn" onClick={()=>onDelete(r.id)} title="Smazat"><IcoTrash/></button>
+            </div>
+            <div className="round-buyer-line">
+              Platil: <b>{buyObj?.name||'?'}</b> &middot; {pp.toFixed(2)} 🍺/os.
+            </div>
+            <div className="round-avatars">
+              {pObjs.map(c=>(
+                <div key={c.id} title={c.name}>
+                  <Av c={c} size="sm"/>
+                </div>
+              ))}
+            </div>
+            {r.note&&<div className="round-note">"{r.note}"</div>}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+// ── Toast ──────────────────────────────────────────────────────────────────
+const Toast=({msg,err})=><div className="toast" style={err?{background:'var(--red)',color:'#fff'}:{}}>{msg}</div>;
+
+// ── NastaveniTab ────────────────────────────────────────────────────────────
+function NastaveniTab({cfg,onSave}){
+  const [apiKey,setApiKey]=useState(cfg.apiKey||'');
+  const [binId,setBinId]=useState(cfg.binId||'');
+  const [creating,setCreating]=useState(false);
+  const [err,setErr]=useState('');
+  const [ok,setOk]=useState('');
+
+  const save=()=>{
+    if(!apiKey.trim()||!binId.trim()){setErr('Vyplň oba údaje.');return;}
+    onSave({apiKey:apiKey.trim(),binId:binId.trim()});
+    setOk('Uloženo! Načítám data…');setErr('');
+  };
+  const create=async()=>{
+    if(!apiKey.trim()){setErr('Nejdřív zadej API klíč.');return;}
+    setCreating(true);setErr('');setOk('');
+    try{
+      const id=await binCreate(apiKey.trim());
+      setBinId(id);
+      onSave({apiKey:apiKey.trim(),binId:id});
+      setOk(`Bin vytvořen! ID: ${id}`);
+    }catch(e){setErr(e.message);}
+    setCreating(false);
+  };
+
+  return(
+    <div className="fade">
+      <div className="card" style={{background:'var(--accent-d)',border:'1px solid rgba(240,160,32,.2)',marginBottom:14}}>
+        <div style={{fontSize:13,color:'var(--text)',lineHeight:1.7}}>
+          <b style={{color:'var(--accent)'}}>Jak na to (jednorázové nastavení):</b><br/>
+          1. Jdi na <a href="https://jsonbin.io" target="_blank" style={{color:'var(--accent)'}}>jsonbin.io</a> a zaregistruj se zdarma<br/>
+          2. Vlevo klikni na <b style={{color:'var(--accent-b)'}}>API Keys</b> → zkopíruj <b style={{color:'var(--accent-b)'}}>Master Key</b><br/>
+          3. Vlož ho níže a klikni <b style={{color:'var(--accent-b)'}}>Vytvořit nový bin</b><br/>
+          4. Hotovo — pošli URL appky klukům, ať si ji otevřou a zadají stejné údaje
+        </div>
+      </div>
+
+      <div className="form-lbl">Master API klíč (z JSONBin.io)</div>
+      <input type="text" placeholder="$2a$10$…" value={apiKey}
+        onChange={e=>{setApiKey(e.target.value);setErr('');setOk('');}}
+        style={{marginBottom:10,fontFamily:'monospace',fontSize:12}}/>
+
+      <div className="form-lbl">Bin ID <span style={{color:'var(--text3)',fontWeight:400,textTransform:'none',letterSpacing:0}}>(vyplní se automaticky po vytvoření)</span></div>
+      <input type="text" placeholder="64abc123…" value={binId}
+        onChange={e=>{setBinId(e.target.value);setErr('');setOk('');}}
+        style={{marginBottom:12,fontFamily:'monospace',fontSize:12}}/>
+
+      {err&&<div style={{color:'var(--red)',fontSize:13,marginBottom:10}}>⚠ {err}</div>}
+      {ok&&<div style={{color:'var(--green)',fontSize:13,marginBottom:10}}>✓ {ok}</div>}
+
+      <div style={{display:'flex',gap:8,flexDirection:'column'}}>
+        <button className="btn btn-p btn-full" onClick={create} disabled={creating||!apiKey.trim()}>
+          {creating?'Vytváří se…':'✦ Vytvořit nový bin (poprvé)'}
+        </button>
+        <button className="btn btn-g btn-full" onClick={save} disabled={!apiKey.trim()||!binId.trim()}>
+          Uložit nastavení
+        </button>
+      </div>
+
+      {cfg.apiKey&&cfg.binId&&(
+        <div style={{marginTop:16}}>
+          <div className="form-lbl">Sdílet s klukama</div>
+          <div style={{display:'flex',gap:8}}>
+            <input type="text" readOnly value={shareUrl(cfg)} style={{fontSize:11,fontFamily:'monospace',color:'var(--text2)'}}/>
+            <button className="btn btn-g" style={{padding:'10px 14px',flexShrink:0,whiteSpace:'nowrap'}}
+              onClick={()=>{navigator.clipboard.writeText(shareUrl(cfg)).then(()=>setOk('Odkaz zkopírován! Pošli ho klukům.')).catch(()=>setOk(shareUrl(cfg)))}}>
+              Kopírovat
+            </button>
+          </div>
+          <div className="note-text" style={{marginTop:6}}>Kdo otevře tento odkaz, automaticky se připojí ke stejné databázi.</div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ── App ────────────────────────────────────────────────────────────────────
+function App(){
+  const [tab,setTab]=useState('bilance');
+  const [cyclists,setCyclists]=useState([]);
+  const [rounds,setRounds]=useState([]);
+  const [cfg,setCfg]=useState(getCfg);
+  const [syncStatus,setSyncStatus]=useState('idle'); // idle | loading | saving | error
+  const [loaded,setLoaded]=useState(false);
+  const [toast,setToast]=useState(null);
+  const tRef=useRef(null);
+  const saveTimer=useRef(null);
+  const pendingData=useRef(null);
+
+  const isReady=cfg.apiKey&&cfg.binId;
+
+  // ── load on mount / cfg change ──
+  useEffect(()=>{
+    if(!isReady){setLoaded(true);return;}
+    setLoaded(false);setSyncStatus('loading');
+    binLoad(cfg.apiKey,cfg.binId)
+      .then(d=>{
+        setCyclists(d.cyclists||[]);
+        setRounds(d.rounds||[]);
+        setSyncStatus('idle');setLoaded(true);
+      })
+      .catch(e=>{
+        setSyncStatus('error');setLoaded(true);
+        showToast('Nepodařilo se načíst data: '+e.message,true);
+      });
+  },[cfg.apiKey,cfg.binId]);
+
+  // ── debounced cloud save ──
+  const cloudSave=useCallback((cyc,rnd)=>{
+    if(!isReady)return;
+    pendingData.current={cyclists:cyc,rounds:rnd};
+    clearTimeout(saveTimer.current);
+    setSyncStatus('saving');
+    saveTimer.current=setTimeout(async()=>{
+      const d=pendingData.current;
+      try{
+        await binSave(cfg.apiKey,cfg.binId,d);
+        setSyncStatus('idle');
+      }catch(e){
+        setSyncStatus('error');
+        showToast('Chyba při ukládání: '+e.message,true);
+      }
+    },1200);
+  },[cfg.apiKey,cfg.binId,isReady]);
+
+  useEffect(()=>{if(loaded&&isReady)cloudSave(cyclists,rounds);},[cyclists,rounds,loaded]);
+
+  const showToast=(msg,err=false)=>{
+    setToast({msg,err});clearTimeout(tRef.current);
+    tRef.current=setTimeout(()=>setToast(null),2800);
+  };
+
+  const addRound=r=>{
+    setRounds(p=>[...p,r]);
+    showToast('Runda zapsána! 🍺');
+    setTab('bilance');
+  };
+  const delRound=id=>{
+    if(confirm('Smazat tuto rundu?'))setRounds(p=>p.filter(r=>r.id!==id));
+  };
+  const handleCfgSave=newCfg=>{
+    saveCfg(newCfg);setCfg(newCfg);
+  };
+
+  const manualSync=async()=>{
+    if(!isReady||syncStatus==='loading')return;
+    setSyncStatus('loading');
+    try{
+      const d=await binLoad(cfg.apiKey,cfg.binId);
+      setCyclists(d.cyclists||[]);setRounds(d.rounds||[]);
+      setSyncStatus('idle');showToast('Synchronizováno ✓');
+    }catch(e){setSyncStatus('error');showToast('Chyba: '+e.message,true);}
+  };
+
+  const TABS=[
+    {k:'parta',lbl:'Parta',ico:<IcoUsers/>},
+    {k:'runda',lbl:'Runda',ico:<IcoBeer/>},
+    {k:'bilance',lbl:'Bilance',ico:<IcoChart/>},
+    {k:'historie',lbl:'Historie',ico:<IcoList/>},
+    {k:'nastaveni',lbl:'Nastavení',ico:<IcoGear/>},
+  ];
+
+  const titles={parta:'Cyklisté',runda:'Nová runda',bilance:'Přehled',historie:'Historie',nastaveni:'Nastavení'};
+
+  const syncColor=syncStatus==='saving'?'var(--accent)':syncStatus==='error'?'var(--red)':syncStatus==='loading'?'var(--accent)':'var(--text3)';
+  const syncLabel=syncStatus==='saving'?'Ukládám…':syncStatus==='loading'?'Načítám…':syncStatus==='error'?'Chyba':'Synced';
+
+  if(!loaded)return(
+    <div style={{flex:1,display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',gap:12,color:'var(--text2)'}}>
+      <div style={{fontSize:36}}>🍺</div>
+      <div style={{fontSize:14}}>{isReady?'Načítám data…':'Připojuji se…'}</div>
+    </div>
+  );
+
+  return(
+    <>
+      {toast&&<Toast msg={toast.msg} err={toast.err}/>}
+      <div className="header">
+        <div className="header-logo">🍺 PivoTrail</div>
+        <div style={{display:'flex',alignItems:'center',gap:10}}>
+          {isReady&&(
+            <button onClick={manualSync} title="Synchronizovat"
+              style={{background:'none',border:'none',cursor:'pointer',color:syncColor,display:'flex',alignItems:'center',gap:5,fontSize:11,fontWeight:700,padding:'4px 6px',borderRadius:6,transition:'color .2s'}}>
+              <IcoSync/>{syncLabel}
+            </button>
+          )}
+          <div className="header-sub">{titles[tab]}</div>
+        </div>
+      </div>
+
+      {!isReady&&tab!=='nastaveni'&&(
+        <div style={{background:'rgba(240,160,32,.1)',borderBottom:'1px solid rgba(240,160,32,.2)',padding:'10px 16px',fontSize:13,color:'var(--accent)',display:'flex',justifyContent:'space-between',alignItems:'center',flexShrink:0}}>
+          Nastav připojení k databázi
+          <button className="btn btn-p" style={{padding:'5px 12px',fontSize:12}} onClick={()=>setTab('nastaveni')}>Nastavení →</button>
+        </div>
+      )}
+
+      <div className="content">
+        {tab==='parta'&&<PartaTab cyclists={cyclists} onChange={setCyclists}/>}
+        {tab==='runda'&&<RundaTab cyclists={cyclists} onAdd={addRound}/>}
+        {tab==='bilance'&&<BilanceTab cyclists={cyclists} rounds={rounds}/>}
+        {tab==='historie'&&<HistorieTab cyclists={cyclists} rounds={rounds} onDelete={delRound}/>}
+        {tab==='nastaveni'&&<NastaveniTab cfg={cfg} onSave={handleCfgSave}/>}
+      </div>
+      <nav className="nav">
+        {TABS.map(t=>(
+          <button key={t.k} className={`nav-btn${tab===t.k?' active':''}`} onClick={()=>setTab(t.k)}>
+            {t.ico}
+            <span className="nav-lbl">{t.lbl}</span>
+          </button>
+        ))}
+      </nav>
+    </>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+</body>
+</html>
