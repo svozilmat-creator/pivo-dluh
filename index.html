@@ -79,16 +79,16 @@ input[type=date]{color-scheme:dark}
 .sh-handle{width:40px;height:4px;background:var(--bd2);border-radius:2px;margin:0 auto 18px}
 .dc{border-radius:var(--r);overflow:hidden;margin-bottom:14px;border:1px solid var(--rline)}
 .dc-top{padding:18px 18px 14px;background:var(--rsoft);display:flex;align-items:center;gap:16px}
-.dc-lbl{font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;margin-bottom:3px}
-.dc-name{font-size:22px;font-weight:900;color:var(--tx);line-height:1.1}
-.dc-sub{font-size:13px;color:var(--tx2);margin-top:3px}
-.dc-amt{font-size:40px;font-weight:900;color:var(--red);font-family:Impact,'Arial Black',sans-serif;line-height:1;text-align:right}
-.dc-unit{font-size:13px;color:var(--tx2);margin-top:1px;text-align:right}
+.dc-lbl{font-size:11px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;margin-bottom:4px;color:var(--tx3)}
+.dc-name{font-size:20px;font-weight:900;color:var(--tx);line-height:1.15}
+.dc-sub{font-size:12px;color:var(--tx2);margin-top:3px}
+.dc-amt{font-size:20px;font-weight:900;color:var(--red);font-family:inherit;line-height:1.2;text-align:right}
+.dc-unit{font-size:12px;color:var(--tx2);margin-top:2px;text-align:right}
 .dc-sep{display:flex;align-items:center;padding:0 16px;background:var(--s1);gap:10px}
 .dc-sep-line{flex:1;height:1px;background:var(--bd2)}
 .dc-sep-txt{font-size:11px;font-weight:800;color:var(--tx3);letter-spacing:.08em;padding:6px 0}
 .dc-bot{padding:13px 18px;background:var(--gsoft);display:flex;align-items:center;gap:14px;border-top:1px solid var(--gline)}
-.dc-bot-name{font-size:17px;font-weight:800;color:var(--tx)}
+.dc-bot-name{font-size:20px;font-weight:900;color:var(--tx)}
 .dc-actions{padding:12px 18px;background:var(--s2);border-top:1px solid var(--bd);display:flex;gap:8px}
 .pc{border-radius:var(--r);overflow:hidden;margin-bottom:10px;border:1px solid var(--bd);cursor:pointer}
 .pc-top{display:flex;align-items:center;gap:14px;padding:14px 16px}
@@ -367,27 +367,27 @@ function BilanceTab({cyclists,rounds,settlements,onTabChange,onSettle,onPersonCl
               </div>
               {sets.map((s,i)=>(
                 <div key={i} className="dc">
-                  {/* BIG CLEAR HEADLINE — kdo dluží komu */}
-                  <div style={{padding:'14px 18px 10px',background:'var(--s2)',borderBottom:'1px solid var(--bd)',display:'flex',alignItems:'center',gap:10,flexWrap:'wrap'}}>
-                    <span style={{fontSize:11,fontWeight:800,color:'var(--tx3)',letterSpacing:'.08em',textTransform:'uppercase'}}>#{i+1}</span>
+                  {/* HEADLINE — kdo dluží komu */}
+                  <div style={{padding:'10px 14px 9px',background:'var(--s2)',borderBottom:'1px solid var(--bd)',display:'flex',alignItems:'center',gap:7,flexWrap:'wrap',rowGap:5}}>
+                    <span style={{fontSize:10,fontWeight:800,color:'var(--tx3)',letterSpacing:'.08em',textTransform:'uppercase',flexShrink:0}}>#{i+1}</span>
                     <Av c={s.from} size="sm" onClick={()=>onPersonClick(s.from)}/>
-                    <b style={{fontSize:15,color:'var(--tx)'}}>{s.from.name}</b>
-                    <span style={{fontSize:13,color:'var(--tx3)'}}>→ vrátí</span>
-                    <span style={{fontSize:22,fontWeight:900,color:'var(--red)',fontFamily:"Impact,'Arial Black',sans-serif",lineHeight:1}}>{s.amt.toFixed(1)} 🍺</span>
-                    <span style={{fontSize:13,color:'var(--tx3)'}}>→ pro</span>
+                    <b style={{fontSize:13,color:'var(--tx)',flexShrink:0}}>{s.from.name}</b>
+                    <span style={{fontSize:11,color:'var(--tx3)',flexShrink:0}}>vrátí</span>
+                    <span style={{fontSize:16,fontWeight:900,color:'var(--red)',fontFamily:"Impact,'Arial Black',sans-serif",lineHeight:1,flexShrink:0}}>{s.amt.toFixed(1)} 🍺</span>
+                    <span style={{fontSize:11,color:'var(--tx3)',flexShrink:0}}>pro</span>
                     <Av c={s.to} size="sm" onClick={()=>onPersonClick(s.to)}/>
-                    <b style={{fontSize:15,color:'var(--tx)'}}>{s.to.name}</b>
+                    <b style={{fontSize:13,color:'var(--tx)',flexShrink:0}}>{s.to.name}</b>
                   </div>
                   <div className="dc-top">
-                    <Av c={s.from} size="xl" onClick={()=>onPersonClick(s.from)}/>
-                    <div style={{flex:1}}>
+                    <Av c={s.from} size="lg" onClick={()=>onPersonClick(s.from)}/>
+                    <div style={{flex:1,minWidth:0}}>
                       <div className="dc-lbl" style={{color:'var(--red)'}}>dluží</div>
-                      <div className="dc-name">{s.from.name}</div>
+                      <div className="dc-name" style={{overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>{s.from.name}</div>
                       <div className="dc-sub">zaplatil méně, než vypil</div>
                     </div>
-                    <div>
-                      <div className="dc-amt">{s.amt.toFixed(1)}</div>
-                      <div className="dc-unit">🍺 {bw(Math.round(s.amt))}</div>
+                    <div style={{flexShrink:0,textAlign:'right'}}>
+                      <div className="dc-amt">{s.amt.toFixed(1)} 🍺</div>
+                      <div className="dc-unit">{bw(Math.round(s.amt))}</div>
                     </div>
                   </div>
                   <div className="dc-sep">
@@ -395,11 +395,14 @@ function BilanceTab({cyclists,rounds,settlements,onTabChange,onSettle,onPersonCl
                   </div>
                   <div className="dc-bot">
                     <Av c={s.to} size="lg" onClick={()=>onPersonClick(s.to)}/>
-                    <div style={{flex:1}}>
+                    <div style={{flex:1,minWidth:0}}>
                       <div className="dc-lbl" style={{color:'var(--grn)'}}>dostane zpět</div>
-                      <div className="dc-bot-name">{s.to.name}</div>
+                      <div className="dc-bot-name" style={{overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>{s.to.name}</div>
                     </div>
-                    <div style={{fontSize:26,fontWeight:900,color:'var(--grn)',fontFamily:"Impact,'Arial Black',sans-serif"}}>{s.amt.toFixed(1)} 🍺</div>
+                    <div style={{textAlign:'right',flexShrink:0}}>
+                      <div style={{fontSize:20,fontWeight:900,color:'var(--grn)'}}>{s.amt.toFixed(1)} 🍺</div>
+                      <div style={{fontSize:12,color:'var(--tx2)'}}>{bw(Math.round(s.amt))}</div>
+                    </div>
                   </div>
                   <div className="dc-actions">
                     <button className="btn btn-b btn-w" style={{fontSize:13}} onClick={()=>setSettling(s)}>
