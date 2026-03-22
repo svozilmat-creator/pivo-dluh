@@ -111,14 +111,14 @@ input[type=date]{color-scheme:dark}
 <script type="text/babel">
 const {useState,useEffect,useRef,useCallback}=React;
 const COLS=['#d95555','#4a8fe0','#48a848','#d07010','#9050c0','#18a888','#c04878','#3aa0c0','#b87040','#6868cc'];
-const LCFG='pt:cfg4';
-
-function getCfg(){
-  try{const h=location.hash.slice(1);if(h){const p=new URLSearchParams(h);const k=p.get('k'),b=p.get('b');if(k&&b){const c={apiKey:k,binId:b};localStorage.setItem(LCFG,JSON.stringify(c));history.replaceState(null,'',location.pathname);return c;}}}catch(e){}
-  try{return JSON.parse(localStorage.getItem(LCFG)||'{}');}catch(e){return {};}
-}
-function saveCfg(c){localStorage.setItem(LCFG,JSON.stringify(c));}
-function shareUrl(cfg){return location.origin+location.pathname+'#k='+encodeURIComponent(cfg.apiKey)+'&b='+encodeURIComponent(cfg.binId);}
+// ── Sdílená konfigurace — hardcoded pro celou partu ──
+const FIXED_CFG={
+  apiKey:'$2a$10$XY4yIk0q5CokbrKCEAVnrucirwa8Kp87eaa/DI.1uh4fgGiO2iQEu',
+  binId:'69b4536fc3097a1dd521f4c3'
+};
+function getCfg(){return FIXED_CFG;}
+function saveCfg(c){}
+function shareUrl(cfg){return location.origin+location.pathname;}
 
 const BASE='https://api.jsonbin.io/v3/b';
 async function bLoad(k,b){const r=await fetch(BASE+'/'+b+'/latest',{headers:{'X-Master-Key':k,'X-Bin-Meta':'false'}});if(!r.ok)throw new Error('HTTP '+r.status);return r.json();}
@@ -363,10 +363,21 @@ function BilanceTab({cyclists,rounds,settlements,onTabChange,onSettle,onPersonCl
           ):(
             <>
               <div style={{fontSize:13,color:'var(--tx2)',marginBottom:14,lineHeight:1.7}}>
-                Aby bylo vše vyrovnané, stačí <b style={{color:'var(--tx)'}}>{sets.length===1?'tato 1 transakce':'tyto '+sets.length+' transakce'}</b>. Klepnutím zaznamenat splacení:
+                Aby bylo vše vyrovnané, stačí <b style={{color:'var(--tx)'}}>{sets.length===1?'tato 1 transakce':'tyto '+sets.length+' transakce'}</b>:
               </div>
               {sets.map((s,i)=>(
                 <div key={i} className="dc">
+                  {/* BIG CLEAR HEADLINE — kdo dluží komu */}
+                  <div style={{padding:'14px 18px 10px',background:'var(--s2)',borderBottom:'1px solid var(--bd)',display:'flex',alignItems:'center',gap:10,flexWrap:'wrap'}}>
+                    <span style={{fontSize:11,fontWeight:800,color:'var(--tx3)',letterSpacing:'.08em',textTransform:'uppercase'}}>#{i+1}</span>
+                    <Av c={s.from} size="sm" onClick={()=>onPersonClick(s.from)}/>
+                    <b style={{fontSize:15,color:'var(--tx)'}}>{s.from.name}</b>
+                    <span style={{fontSize:13,color:'var(--tx3)'}}>→ vrátí</span>
+                    <span style={{fontSize:22,fontWeight:900,color:'var(--red)',fontFamily:"Impact,'Arial Black',sans-serif",lineHeight:1}}>{s.amt.toFixed(1)} 🍺</span>
+                    <span style={{fontSize:13,color:'var(--tx3)'}}>→ pro</span>
+                    <Av c={s.to} size="sm" onClick={()=>onPersonClick(s.to)}/>
+                    <b style={{fontSize:15,color:'var(--tx)'}}>{s.to.name}</b>
+                  </div>
                   <div className="dc-top">
                     <Av c={s.from} size="xl" onClick={()=>onPersonClick(s.from)}/>
                     <div style={{flex:1}}>
@@ -392,7 +403,7 @@ function BilanceTab({cyclists,rounds,settlements,onTabChange,onSettle,onPersonCl
                   </div>
                   <div className="dc-actions">
                     <button className="btn btn-b btn-w" style={{fontSize:13}} onClick={()=>setSettling(s)}>
-                      🤝 Zaznamenat vyrovnání
+                      🤝 Zaznamenat splacení
                     </button>
                   </div>
                 </div>
@@ -448,7 +459,10 @@ function BilanceTab({cyclists,rounds,settlements,onTabChange,onSettle,onPersonCl
               </div>
             );
           })}
-          <div style={{fontSize:12,color:'var(--tx3)',textAlign:'center',marginTop:6,fontStyle:'italic'}}>+ = ostatní ti dluží &nbsp;·&nbsp; − = ty dlužíš ostatním</div>
+          <div style={{display:'flex',gap:8,justifyContent:'center',marginTop:10,flexWrap:'wrap'}}>
+            <span style={{fontSize:11,background:'var(--gsoft)',border:'1px solid var(--gline)',padding:'4px 12px',borderRadius:20,color:'var(--grn)',fontWeight:700}}>+číslo = ostatní ti dluží</span>
+            <span style={{fontSize:11,background:'var(--rsoft)',border:'1px solid var(--rline)',padding:'4px 12px',borderRadius:20,color:'var(--red)',fontWeight:700}}>−číslo = ty dlužíš ostatním</span>
+          </div>
         </div>
       )}
     </div>
@@ -470,7 +484,7 @@ function PartaTab({cyclists,onChange,onPersonClick}){
           <button className="btn btn-y" onClick={add} disabled={!name.trim()} style={{padding:'10px 18px',fontSize:22,flexShrink:0}}>+</button>
         </div>
       </div>
-      <div className="sec">{cyclists.length} {pw(cyclists.length)} v partě</div>
+      <div className="sec">{cyclists.length} {pw(cyclists.length)} v partě &nbsp;<span style={{fontWeight:400,color:'var(--tx3)',textTransform:'none',letterSpacing:0,fontSize:11}}>— klepni na jméno pro detail</span></div>
       {cyclists.length===0
         ?<div className="empty" style={{padding:'30px 0'}}><div className="eico">🚴</div><p>Přidej cyklisty!</p></div>
         :<div className="card">{cyclists.map(c=>(
@@ -502,7 +516,13 @@ function RundaTab({cyclists,onAdd}){
     <div className="fade pad">
       <span className="flbl">Datum výletu</span>
       <input type="date" value={date} onChange={e=>setDate(e.target.value)} style={{marginBottom:16}}/>
-      <span className="flbl">Kdo jel? <span style={{color:'var(--tx3)',fontWeight:400,textTransform:'none',letterSpacing:0}}>({parts.length} vybráno)</span></span>
+      <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:7}}>
+        <span className="flbl" style={{marginBottom:0}}>Kdo jel? <span style={{color:'var(--tx3)',fontWeight:400,textTransform:'none',letterSpacing:0}}>({parts.length}/{cyclists.length})</span></span>
+        <button style={{background:'none',border:'none',cursor:'pointer',color:'var(--acc)',fontSize:12,fontWeight:700,padding:'2px 6px'}}
+          onClick={()=>{if(parts.length===cyclists.length){setParts([]);setBuyer(null);}else{setParts(cyclists.map(c=>c.id));if(!buyer)setBuyer(cyclists[0]?.id||null);}}}>
+          {parts.length===cyclists.length?'Zrušit vše':'Vybrat všechny'}
+        </button>
+      </div>
       <div className="chips" style={{marginBottom:16}}>
         {cyclists.map(c=>(
           <button key={c.id} className={'chip'+(parts.includes(c.id)?' on':'')} style={parts.includes(c.id)?{background:c.color}:{}} onClick={()=>toggle(c.id)}>{c.name}</button>
@@ -683,7 +703,7 @@ function App(){
   const [toast,setToast]=useState(null);
   const [personModal,setPersonModal]=useState(null);
   const tRef=useRef(null),sTimer=useRef(null),pending=useRef(null);
-  const isReady=cfg.apiKey&&cfg.binId;
+  const isReady=true; // always connected — credentials hardcoded
 
   useEffect(()=>{
     if(!isReady){setLoaded(true);return;}
@@ -710,7 +730,7 @@ function App(){
   const addRound=r=>{setRounds(p=>[...p,r]);showT('Runda zapsána! 🍺');setTab('bilance');};
   const delRound=id=>{if(confirm('Smazat rundu?'))setRounds(p=>p.filter(r=>r.id!==id));};
   const addSettle=s=>{setSettlements(p=>[...p,s]);showT('Vyrovnání zaznamenáno! 🤝');};
-  const saveCfgH=c=>{saveCfg(c);setCfg(c);};
+
   const manSync=async()=>{
     if(!isReady||sync==='loading')return;setSync('loading');
     try{const d=await bLoad(cfg.apiKey,cfg.binId);setCyclists(d.cyclists||[]);setRounds(d.rounds||[]);setSettlements(d.settlements||[]);setSync('idle');showT('Synchronizováno ✓');}
@@ -725,7 +745,6 @@ function App(){
     {k:'runda',   lbl:'Runda',   ico:<IBeer/>},
     {k:'bilance', lbl:'Bilance', ico:<IChart/>, badge:debtCount},
     {k:'historie',lbl:'Historie',ico:<IList/>},
-    {k:'nastaveni',lbl:'Nastav.',ico:<IGear/>},
   ];
 
   const sc=sync==='saving'||sync==='loading'?'var(--acc)':sync==='error'?'var(--red)':'var(--tx3)';
@@ -745,22 +764,17 @@ function App(){
       {modalC&&<PersonModal cyclist={modalC} cyclists={cyclists} rounds={rounds} settlements={settlements} bal={bal} onClose={()=>setPersonModal(null)}/>}
       <div className="hdr">
         <div className="logo">🍺 PivoTrail</div>
-        {isReady&&<button onClick={manSync} style={{background:'none',border:'none',cursor:'pointer',color:sc,display:'flex',alignItems:'center',gap:5,fontSize:11,fontWeight:800,padding:'4px 8px',borderRadius:7,letterSpacing:'.04em'}}>
+        <button onClick={manSync} style={{background:'none',border:'none',cursor:'pointer',color:sc,display:'flex',alignItems:'center',gap:5,fontSize:11,fontWeight:800,padding:'4px 8px',borderRadius:7,letterSpacing:'.04em'}}>
           <ISync/>{sl}
-        </button>}
+        </button>
       </div>
-      {!isReady&&tab!=='nastaveni'&&(
-        <div style={{background:'var(--asoft)',borderBottom:'1px solid var(--aline)',padding:'11px 16px',fontSize:13,color:'var(--acc)',display:'flex',justifyContent:'space-between',alignItems:'center',flexShrink:0}}>
-          ☁ Nastav sdílenou databázi
-          <button className="btn btn-y" style={{padding:'5px 13px',fontSize:12}} onClick={()=>setTab('nastaveni')}>Nastavení →</button>
-        </div>
-      )}
+
       <div className="body">
         {tab==='parta'    &&<PartaTab cyclists={cyclists} onChange={setCyclists} onPersonClick={setPersonModal}/>}
         {tab==='runda'    &&<RundaTab cyclists={cyclists} onAdd={addRound}/>}
         {tab==='bilance'  &&<BilanceTab cyclists={cyclists} rounds={rounds} settlements={settlements} onTabChange={setTab} onSettle={addSettle} onPersonClick={setPersonModal}/>}
         {tab==='historie' &&<HistorieTab cyclists={cyclists} rounds={rounds} settlements={settlements} onDelete={delRound} onPersonClick={setPersonModal}/>}
-        {tab==='nastaveni'&&<NastaveniTab cfg={cfg} onSave={saveCfgH}/>}
+
       </div>
       <nav className="nav">
         {TABS.map(t=>(
