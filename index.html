@@ -3,707 +3,771 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>PivoTrail</title>
+<title>PivoTrail 🍺</title>
 <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
 <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
 <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 :root{
-  --bg:#0e1a0e;--s1:#182818;--s2:#213221;--s3:#2c422c;--s4:#374f37;
-  --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.13);
-  --accent:#f0a020;--accent-d:rgba(240,160,32,0.12);--accent-b:#f5c050;
-  --text:#e2ddd0;--text2:#7da07d;--text3:#4d6e4d;
-  --red:#d95555;--green:#55aa55;
-  --r:14px;--rsm:8px;--nav:60px;
+  --bg:#0d1a0d;--s1:#162616;--s2:#1e301e;--s3:#283f28;--s4:#334d33;
+  --bd:rgba(255,255,255,0.07);--bd2:rgba(255,255,255,0.14);
+  --acc:#f0a020;--asoft:rgba(240,160,32,0.13);--aline:rgba(240,160,32,0.3);
+  --tx:#e0dbd0;--tx2:#7aa07a;--tx3:#4a6a4a;
+  --red:#d85050;--rsoft:rgba(216,80,80,0.12);--rline:rgba(216,80,80,0.3);
+  --grn:#4aaa4a;--gsoft:rgba(74,170,74,0.12);--gline:rgba(74,170,74,0.3);
+  --blu:#4a80d8;--bsoft:rgba(74,128,216,0.12);--bline:rgba(74,128,216,0.3);
+  --r:16px;--rsm:9px;--nav:64px;
 }
-html,body{height:100%;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,'Segoe UI',sans-serif;font-size:15px;line-height:1.5}
-#root{height:100%;display:flex;flex-direction:column;max-width:460px;margin:0 auto}
-
-/* ── layout ── */
-.header{flex-shrink:0;padding:14px 16px 10px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
-.header-logo{font-size:22px;font-weight:900;letter-spacing:-0.03em;color:var(--accent);font-family:Impact,'Arial Black',sans-serif;display:flex;align-items:center;gap:6px}
-.header-sub{font-size:12px;color:var(--text2);font-weight:600;letter-spacing:0.06em;text-transform:uppercase}
-.content{flex:1;overflow-y:auto;overflow-x:hidden;padding:14px 14px 10px;-webkit-overflow-scrolling:touch}
-.content::-webkit-scrollbar{width:2px}
-.content::-webkit-scrollbar-thumb{background:var(--s4);border-radius:2px}
-.nav{flex-shrink:0;height:var(--nav);background:var(--s1);border-top:1px solid var(--border);display:flex}
-.nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:var(--text3);background:none;border:none;cursor:pointer;transition:color .15s;padding:0}
-.nav-btn.active{color:var(--accent)}
-.nav-btn svg{width:20px;height:20px}
-.nav-lbl{font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
-
-/* ── cards ── */
-.card{background:var(--s1);border:1px solid var(--border);border-radius:var(--r);padding:14px;margin-bottom:12px}
-.section-title{font-size:11px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.08em;margin:16px 0 8px}
-.section-title:first-child{margin-top:0}
-.divider{height:1px;background:var(--border);margin:12px 0}
-
-/* ── avatar ── */
-.av{border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;flex-shrink:0;color:#fff}
-.av-lg{width:40px;height:40px;font-size:15px}
-.av-md{width:32px;height:32px;font-size:12px}
-.av-sm{width:26px;height:26px;font-size:10px}
-
-/* ── inputs ── */
-input[type=text],input[type=number],input[type=date]{background:var(--s2);border:1px solid var(--border);color:var(--text);border-radius:var(--rsm);padding:10px 12px;width:100%;font-size:14px;outline:none;transition:border-color .15s;-webkit-appearance:none}
-input:focus{border-color:var(--accent)}
+html,body{height:100%;background:var(--bg);color:var(--tx);font-family:system-ui,-apple-system,'Segoe UI',sans-serif;font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased}
+#root{height:100%;display:flex;flex-direction:column;max-width:480px;margin:0 auto;position:relative}
+.hdr{flex-shrink:0;padding:13px 16px 11px;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;background:var(--s1)}
+.logo{font-size:21px;font-weight:900;color:var(--acc);font-family:Impact,'Arial Black',sans-serif;letter-spacing:-0.02em}
+.body{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch}
+.body::-webkit-scrollbar{width:2px}
+.body::-webkit-scrollbar-thumb{background:var(--s4);border-radius:2px}
+.pad{padding:14px}
+.nav{flex-shrink:0;height:var(--nav);background:var(--s1);border-top:1px solid var(--bd);display:flex}
+.nb{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:var(--tx3);background:none;border:none;cursor:pointer;transition:color .15s;padding:0;position:relative}
+.nb.on{color:var(--acc)}
+.nb svg{width:21px;height:21px}
+.nl{font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase}
+.badge{position:absolute;top:6px;right:calc(50% - 18px);background:var(--red);color:#fff;font-size:10px;font-weight:900;min-width:17px;height:17px;border-radius:9px;display:flex;align-items:center;justify-content:center;padding:0 4px;line-height:1}
+.card{background:var(--s1);border:1px solid var(--bd);border-radius:var(--r);padding:14px;margin-bottom:12px}
+.sec{font-size:11px;font-weight:700;color:var(--tx2);text-transform:uppercase;letter-spacing:.09em;margin:18px 0 9px}
+.sec:first-child{margin-top:0}
+.av{border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;flex-shrink:0;color:#fff;letter-spacing:-0.02em}
+.av-xl{width:56px;height:56px;font-size:19px}
+.av-lg{width:44px;height:44px;font-size:16px}
+.av-md{width:34px;height:34px;font-size:13px}
+.av-sm{width:27px;height:27px;font-size:10px}
+input[type=text],input[type=date],input[type=number]{background:var(--s2);border:1px solid var(--bd);color:var(--tx);border-radius:var(--rsm);padding:10px 13px;width:100%;font-size:14px;outline:none;transition:border-color .15s;-webkit-appearance:none;font-family:inherit}
+input:focus{border-color:var(--acc)}
 input[type=date]{color-scheme:dark}
-
-/* ── buttons ── */
-.btn{padding:10px 18px;border-radius:var(--rsm);font-size:14px;font-weight:700;border:none;cursor:pointer;transition:opacity .15s,transform .1s;display:inline-flex;align-items:center;justify-content:center;gap:6px}
+.btn{padding:11px 18px;border-radius:var(--rsm);font-size:14px;font-weight:700;border:none;cursor:pointer;transition:opacity .15s,transform .1s;display:inline-flex;align-items:center;justify-content:center;gap:7px}
 .btn:active{transform:scale(.97)}
-.btn:disabled{opacity:.35;pointer-events:none}
-.btn-p{background:var(--accent);color:#1a0e00}
-.btn-g{background:var(--s3);color:var(--text);border:1px solid var(--border2)}
-.btn-d{background:transparent;color:var(--red);border:1px solid var(--red);padding:6px 12px;font-size:12px}
-.btn-full{width:100%}
-
-/* ── chips ── */
-.chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:7px}
-.chip{padding:7px 14px;border-radius:20px;font-size:13px;font-weight:600;border:2px solid transparent;cursor:pointer;transition:all .15s;background:var(--s3);color:var(--text2)}
-.chip.sel{color:#fff}
-.chip.buyer-ring{outline:2.5px solid var(--accent);outline-offset:2px}
-
-/* ── stepper ── */
-.stepper{display:flex;align-items:center;border:1px solid var(--border2);border-radius:var(--rsm);overflow:hidden;height:46px}
-.step-btn{width:50px;height:100%;background:var(--s2);color:var(--text);border:none;font-size:22px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .1s;flex-shrink:0}
-.step-btn:active{background:var(--s3)}
-.step-val{flex:1;text-align:center;font-size:19px;font-weight:800;background:var(--s1);color:var(--text);padding:0 8px}
-
-/* ── balance ── */
-.bal-item{display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid var(--border)}
-.bal-item:last-child{border-bottom:none}
-.bal-bar-bg{flex:1;height:5px;background:var(--s3);border-radius:3px;overflow:hidden}
-.bal-bar{height:100%;border-radius:3px;transition:width .5s ease}
-.bal-val{font-size:13px;font-weight:700;min-width:62px;text-align:right}
-.pos{color:var(--green)}.neg{color:var(--red)}.zero{color:var(--text2)}
-
-/* ── settlement ── */
-.settle{display:flex;align-items:center;gap:10px;padding:11px 13px;background:var(--s2);border:1px solid var(--border);border-radius:var(--rsm);margin-bottom:8px}
-.settle-mid{flex:1;font-size:13px;line-height:1.4}
-.settle-amt{font-weight:800;color:var(--accent);font-size:14px}
-.settle-arrow{color:var(--accent)}
-
-/* ── history ── */
-.round-card{background:var(--s1);border:1px solid var(--border);border-radius:var(--r);padding:13px;margin-bottom:10px}
-.round-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:9px}
-.round-beer{font-size:30px;font-weight:900;color:var(--accent);font-family:Impact,'Arial Black',sans-serif;line-height:1}
-.round-meta{font-size:12px;color:var(--text2);margin-top:2px}
-.round-buyer-line{font-size:13px;color:var(--text2);margin-bottom:7px}
-.round-buyer-line b{color:var(--accent)}
-.round-avatars{display:flex;flex-wrap:wrap;gap:4px}
-.round-note{font-size:12px;color:var(--text3);font-style:italic;margin-top:6px}
-
-/* ── stats ── */
-.stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-bottom:14px}
-.stat-box{background:var(--s2);border-radius:var(--rsm);padding:12px 8px;text-align:center}
-.stat-n{font-size:26px;font-weight:900;color:var(--accent);font-family:Impact,'Arial Black',sans-serif;line-height:1}
-.stat-l{font-size:10px;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;margin-top:3px}
-
-/* ── misc ── */
-.add-row{display:flex;gap:8px}
-.cyclist-row{display:flex;align-items:center;gap:11px;padding:10px 0;border-bottom:1px solid var(--border)}
-.cyclist-row:last-child{border-bottom:none}
-.c-name{flex:1;font-weight:600;font-size:14px}
-.del-btn{background:none;border:none;color:var(--text3);cursor:pointer;padding:5px;border-radius:5px;display:flex;align-items:center;justify-content:center;transition:color .15s}
-.del-btn:hover{color:var(--red)}
-.form-lbl{font-size:11px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;display:block}
-.note-text{font-size:12px;color:var(--text2);margin-top:6px;font-style:italic}
-.empty-state{text-align:center;padding:50px 20px;color:var(--text2)}
-.empty-icon{font-size:52px;margin-bottom:12px}
-.empty-state p{font-size:14px;line-height:1.6}
-.preview-box{background:var(--accent-d);border:1px solid rgba(240,160,32,.25);border-radius:var(--rsm);padding:12px 14px;margin:14px 0;font-size:13px;color:var(--text2);line-height:1.6}
-.preview-box b{color:var(--accent)}
-.toast{position:fixed;top:14px;left:50%;transform:translateX(-50%);background:var(--green);color:#0a1f0a;padding:9px 20px;border-radius:20px;font-weight:700;font-size:13px;z-index:999;white-space:nowrap;animation:fadeIn .2s ease;box-shadow:0 4px 20px rgba(0,0,0,.4)}
-.top-buyer-badge{display:inline-flex;align-items:center;gap:6px;background:var(--accent-d);border:1px solid rgba(240,160,32,.25);padding:5px 11px;border-radius:20px;font-size:12px;color:var(--accent);font-weight:700;margin-bottom:4px}
-@keyframes fadeIn{from{opacity:0;transform:translateX(-50%) translateY(-6px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
-.fade{animation:tabFade .2s ease}
-@keyframes tabFade{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+.btn:disabled{opacity:.3;pointer-events:none}
+.btn-y{background:var(--acc);color:#170e00}
+.btn-g{background:var(--s3);color:var(--tx);border:1px solid var(--bd2)}
+.btn-b{background:var(--bsoft);color:var(--blu);border:1px solid var(--bline)}
+.btn-w{width:100%}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{padding:8px 15px;border-radius:22px;font-size:13px;font-weight:600;border:2px solid transparent;cursor:pointer;transition:all .15s;background:var(--s3);color:var(--tx2)}
+.chip.on{color:#fff}
+.chip.star{outline:2.5px solid var(--acc);outline-offset:2px}
+.step{display:flex;align-items:center;border:1px solid var(--bd2);border-radius:var(--rsm);overflow:hidden;height:48px}
+.stepb{width:52px;height:100%;background:var(--s2);color:var(--tx);border:none;font-size:23px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .1s;flex-shrink:0}
+.stepb:active{background:var(--s3)}
+.stepv{flex:1;text-align:center;font-size:20px;font-weight:900;background:var(--s1);color:var(--tx)}
+.flbl{font-size:11px;font-weight:700;color:var(--tx2);text-transform:uppercase;letter-spacing:.07em;margin-bottom:7px;display:block}
+.ntxt{font-size:12px;color:var(--tx2);font-style:italic}
+.empty{text-align:center;padding:52px 24px;color:var(--tx2)}
+.eico{font-size:54px;margin-bottom:14px}
+.empty p{font-size:14px;line-height:1.7}
+.crow{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid var(--bd)}
+.crow:last-child{border-bottom:none}
+.dbtn{background:none;border:none;color:var(--tx3);cursor:pointer;padding:5px;border-radius:5px;display:flex;transition:color .15s}
+.dbtn:hover{color:var(--red)}
+.toast{position:fixed;top:14px;left:50%;transform:translateX(-50%);padding:10px 22px;border-radius:22px;font-weight:700;font-size:13px;z-index:999;white-space:nowrap;box-shadow:0 4px 24px rgba(0,0,0,.5);animation:fadein .2s ease}
+@keyframes fadein{from{opacity:0;transform:translateX(-50%) translateY(-8px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+.fade{animation:tabin .18s ease}
+@keyframes tabin{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:100;display:flex;align-items:flex-end;animation:overin .2s ease}
+@keyframes overin{from{opacity:0}to{opacity:1}}
+.sheet{background:var(--s1);border-radius:20px 20px 0 0;padding:20px;max-height:88vh;overflow-y:auto;width:100%;max-width:480px;margin:0 auto;animation:sheetin .25s ease}
+@keyframes sheetin{from{transform:translateY(60px);opacity:0}to{transform:translateY(0);opacity:1}}
+.sh-handle{width:40px;height:4px;background:var(--bd2);border-radius:2px;margin:0 auto 18px}
+.dc{border-radius:var(--r);overflow:hidden;margin-bottom:14px;border:1px solid var(--rline)}
+.dc-top{padding:18px 18px 14px;background:var(--rsoft);display:flex;align-items:center;gap:16px}
+.dc-lbl{font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;margin-bottom:3px}
+.dc-name{font-size:22px;font-weight:900;color:var(--tx);line-height:1.1}
+.dc-sub{font-size:13px;color:var(--tx2);margin-top:3px}
+.dc-amt{font-size:40px;font-weight:900;color:var(--red);font-family:Impact,'Arial Black',sans-serif;line-height:1;text-align:right}
+.dc-unit{font-size:13px;color:var(--tx2);margin-top:1px;text-align:right}
+.dc-sep{display:flex;align-items:center;padding:0 16px;background:var(--s1);gap:10px}
+.dc-sep-line{flex:1;height:1px;background:var(--bd2)}
+.dc-sep-txt{font-size:11px;font-weight:800;color:var(--tx3);letter-spacing:.08em;padding:6px 0}
+.dc-bot{padding:13px 18px;background:var(--gsoft);display:flex;align-items:center;gap:14px;border-top:1px solid var(--gline)}
+.dc-bot-name{font-size:17px;font-weight:800;color:var(--tx)}
+.dc-actions{padding:12px 18px;background:var(--s2);border-top:1px solid var(--bd);display:flex;gap:8px}
+.pc{border-radius:var(--r);overflow:hidden;margin-bottom:10px;border:1px solid var(--bd);cursor:pointer}
+.pc-top{display:flex;align-items:center;gap:14px;padding:14px 16px}
+.pc-st{font-size:12px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;margin-bottom:2px}
+.pc-name{font-size:18px;font-weight:900;color:var(--tx)}
+.pc-bal{font-size:32px;font-weight:900;font-family:Impact,'Arial Black',sans-serif;line-height:1;text-align:right;flex-shrink:0}
+.pc-tags{display:flex;gap:6px;flex-wrap:wrap;padding:0 16px 13px}
+.ptag{font-size:11px;background:var(--s2);padding:4px 10px;border-radius:20px;color:var(--tx2);font-weight:600}
+.sg{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-bottom:16px}
+.sb{background:var(--s2);border-radius:var(--rsm);padding:13px 8px;text-align:center;border:1px solid var(--bd)}
+.sn{font-size:28px;font-weight:900;color:var(--acc);font-family:Impact,'Arial Black',sans-serif;line-height:1}
+.sl{font-size:10px;color:var(--tx2);text-transform:uppercase;letter-spacing:.07em;margin-top:4px}
+.rc{background:var(--s1);border:1px solid var(--bd);border-radius:var(--r);overflow:hidden;margin-bottom:10px}
+.rc-top{padding:13px 15px 10px;border-bottom:1px solid var(--bd)}
+.rc-bot{padding:10px 15px 13px;background:var(--s2)}
 </style>
 </head>
 <body>
 <div id="root"></div>
 <script type="text/babel">
 const {useState,useEffect,useRef,useCallback}=React;
+const COLS=['#d95555','#4a8fe0','#48a848','#d07010','#9050c0','#18a888','#c04878','#3aa0c0','#b87040','#6868cc'];
+const LCFG='pt:cfg4';
 
-// ── constants ──────────────────────────────────────────────────────────────
-const COLORS=['#e05555','#4a8fe0','#58aa58','#d97c10','#9b50c8','#1aa890','#d45580','#4ab0c8','#c87850','#7070d4'];
-const LS_CFG='pivotrail:cfg';
-
-// ── settings helpers ────────────────────────────────────────────────────────
 function getCfg(){
-  try{
-    const h=location.hash.slice(1);
-    if(h){const p=new URLSearchParams(h);const k=p.get('k'),b=p.get('b');
-      if(k&&b){const c={apiKey:k,binId:b};localStorage.setItem(LS_CFG,JSON.stringify(c));history.replaceState(null,'',location.pathname+location.search);return c;}}
-  }catch{}
-  try{return JSON.parse(localStorage.getItem(LS_CFG)||'{}')}catch{return {}}
+  try{const h=location.hash.slice(1);if(h){const p=new URLSearchParams(h);const k=p.get('k'),b=p.get('b');if(k&&b){const c={apiKey:k,binId:b};localStorage.setItem(LCFG,JSON.stringify(c));history.replaceState(null,'',location.pathname);return c;}}}catch(e){}
+  try{return JSON.parse(localStorage.getItem(LCFG)||'{}');}catch(e){return {};}
 }
-function saveCfg(c){localStorage.setItem(LS_CFG,JSON.stringify(c))}
-function shareUrl(cfg){return location.origin+location.pathname+'#k='+encodeURIComponent(cfg.apiKey)+'&b='+encodeURIComponent(cfg.binId)}
+function saveCfg(c){localStorage.setItem(LCFG,JSON.stringify(c));}
+function shareUrl(cfg){return location.origin+location.pathname+'#k='+encodeURIComponent(cfg.apiKey)+'&b='+encodeURIComponent(cfg.binId);}
 
-// ── JSONBin API ─────────────────────────────────────────────────────────────
-const BIN_BASE='https://api.jsonbin.io/v3/b';
-async function binLoad(apiKey,binId){
-  const r=await fetch(`${BIN_BASE}/${binId}/latest`,{headers:{'X-Master-Key':apiKey,'X-Bin-Meta':'false'}});
-  if(!r.ok)throw new Error(`Chyba ${r.status}`);
-  return await r.json();
-}
-async function binSave(apiKey,binId,data){
-  const r=await fetch(`${BIN_BASE}/${binId}`,{method:'PUT',headers:{'Content-Type':'application/json','X-Master-Key':apiKey},body:JSON.stringify(data)});
-  if(!r.ok)throw new Error(`Chyba ${r.status}`);
-}
-async function binCreate(apiKey){
-  const r=await fetch(BIN_BASE,{method:'POST',headers:{'Content-Type':'application/json','X-Master-Key':apiKey,'X-Bin-Name':'PivoTrail','X-Bin-Private':'false'},body:JSON.stringify({cyclists:[],rounds:[]})});
-  if(!r.ok)throw new Error(`Chyba ${r.status} — zkontroluj API klíč`);
-  const d=await r.json();
-  return d.metadata.id;
-}
+const BASE='https://api.jsonbin.io/v3/b';
+async function bLoad(k,b){const r=await fetch(BASE+'/'+b+'/latest',{headers:{'X-Master-Key':k,'X-Bin-Meta':'false'}});if(!r.ok)throw new Error('HTTP '+r.status);return r.json();}
+async function bSave(k,b,d){const r=await fetch(BASE+'/'+b,{method:'PUT',headers:{'Content-Type':'application/json','X-Master-Key':k},body:JSON.stringify(d)});if(!r.ok)throw new Error('HTTP '+r.status);}
+async function bCreate(k){const r=await fetch(BASE,{method:'POST',headers:{'Content-Type':'application/json','X-Master-Key':k,'X-Bin-Name':'PivoTrail','X-Bin-Private':'false'},body:JSON.stringify({cyclists:[],rounds:[],settlements:[]})});if(!r.ok)throw new Error('HTTP '+r.status+' — zkontroluj API klíč');return(await r.json()).metadata.id;}
 
-// ── utils ──────────────────────────────────────────────────────────────────
 const uid=()=>Math.random().toString(36).slice(2,9);
 const ini=n=>n.trim().split(/\s+/).map(w=>w[0]).slice(0,2).join('').toUpperCase();
 const today=()=>new Date().toISOString().slice(0,10);
-const fmtDate=iso=>{
-  const d=new Date(iso+'T12:00:00');
-  return d.toLocaleDateString('cs-CZ',{day:'numeric',month:'short',year:'numeric'});
-};
-const beerWord=n=>n===1?'pivo':n<5?'piva':'piv';
+const fmt=iso=>new Date(iso+'T12:00:00').toLocaleDateString('cs-CZ',{day:'numeric',month:'long'});
+const bw=n=>n===1?'pivo':n<5?'piva':'piv';
 
-// ── balance logic ──────────────────────────────────────────────────────────
-function calcBalances(cyclists,rounds){
+function calcBal(cyclists,rounds,settlements){
   const b={};
-  cyclists.forEach(c=>b[c.id]=0);
+  cyclists.forEach(c=>{b[c.id]=0;});
   rounds.forEach(r=>{
-    const n=r.participants.length;
-    if(!n)return;
+    const n=r.participants.length;if(!n)return;
     const pp=r.beerCount/n;
-    r.participants.forEach(pid=>{
-      b[pid]=(b[pid]||0)+(pid===r.buyer?r.beerCount-pp:-pp);
-    });
+    r.participants.forEach(pid=>{b[pid]=(b[pid]||0)+(pid===r.buyer?r.beerCount-pp:-pp);});
   });
+  (settlements||[]).forEach(s=>{b[s.from]=(b[s.from]||0)+s.amount;b[s.to]=(b[s.to]||0)-s.amount;});
   return b;
 }
-
-function calcSettlements(balances,cyclists){
+function calcSet(bal,cyclists){
   const eps=0.005;
-  const cre=[];const deb=[];
-  cyclists.forEach(c=>{
-    const v=balances[c.id]||0;
-    if(v>eps)cre.push({...c,v});
-    else if(v<-eps)deb.push({...c,v});
-  });
-  cre.sort((a,b)=>b.v-a.v);deb.sort((a,b)=>a.v-b.v);
-  const res=[];
+  const cr=[],de=[];
+  cyclists.forEach(c=>{const v=bal[c.id]||0;if(v>eps)cr.push({...c,v});else if(v<-eps)de.push({...c,v});});
+  cr.sort((a,b)=>b.v-a.v);de.sort((a,b)=>a.v-b.v);
+  const res=[],C=cr.map(x=>({...x})),D=de.map(x=>({...x}));
   let ci=0,di=0;
-  const C=cre.map(c=>({...c}));const D=deb.map(d=>({...d}));
   while(ci<C.length&&di<D.length){
-    const c=C[ci],d=D[di];
-    const amt=Math.min(c.v,-d.v);
+    const c=C[ci],d=D[di];const amt=Math.min(c.v,-d.v);
     if(amt>eps)res.push({from:d,to:c,amt});
-    c.v-=amt;d.v+=amt;
-    if(c.v<eps)ci++;
-    if(d.v>-eps)di++;
+    c.v-=amt;d.v+=amt;if(c.v<eps)ci++;if(d.v>-eps)di++;
   }
   return res;
 }
 
-// ── icons ──────────────────────────────────────────────────────────────────
-const IcoUsers=()=><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>;
-const IcoBeer=()=><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 11h1a3 3 0 0 1 0 6h-1"/><path d="M9 12v6"/><path d="M13 12v6"/><path d="M14 7.5c-1 0-1.44.5-3 .5s-2-.5-3-.5-1.44.5-3 .5"/><path d="M5 8v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V8"/><path d="M5 8c0-2 1-2 1-4h10c0 2 1 2 1 4"/></svg>;
-const IcoChart=()=><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/><line x1="2" y1="20" x2="22" y2="20"/></svg>;
-const IcoList=()=><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><circle cx="3" cy="6" r="1" fill="currentColor"/><circle cx="3" cy="12" r="1" fill="currentColor"/><circle cx="3" cy="18" r="1" fill="currentColor"/></svg>;
-const IcoTrash=({sz=15})=><svg width={sz} height={sz} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>;
-const IcoArrow=()=><svg width={18} height={18} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>;
-const IcoCheck=()=><svg width={16} height={16} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round"><polyline points="20 6 9 17 4 12"/></svg>;
-const IcoGear=()=><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>;
-const IcoSync=()=><svg width={16} height={16} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>;
+/* ── icons ── */
+const IUsers=()=><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>;
+const IBeer=()=><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 11h1a3 3 0 0 1 0 6h-1M9 12v6M13 12v6M14 7.5c-1 0-1.44.5-3 .5s-2-.5-3-.5-1.44.5-3 .5M5 8v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V8M5 8c0-2 1-2 1-4h10c0 2 1 2 1 4"/></svg>;
+const IChart=()=><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/><line x1="2" y1="20" x2="22" y2="20"/></svg>;
+const IList=()=><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><circle cx="3" cy="6" r="1.5" fill="currentColor"/><circle cx="3" cy="12" r="1.5" fill="currentColor"/><circle cx="3" cy="18" r="1.5" fill="currentColor"/></svg>;
+const IGear=()=><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>;
+const ITrash=()=><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>;
+const ICheck=()=><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round"><polyline points="20 6 9 17 4 12"/></svg>;
+const ISync=()=><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>;
+const IArrow=()=><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>;
+const IClose=()=><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>;
 
-// ── Avatar ─────────────────────────────────────────────────────────────────
-const Av=({c,size='md'})=>{
-  const cls=size==='lg'?'av av-lg':size==='sm'?'av av-sm':'av av-md';
-  return <div className={cls} style={{background:c.color}}>{ini(c.name)}</div>;
-};
+function Av({c,size,onClick}){
+  const cls=size==='xl'?'av av-xl':size==='lg'?'av av-lg':size==='sm'?'av av-sm':'av av-md';
+  return <div className={cls} style={{background:c.color,cursor:onClick?'pointer':'default'}} onClick={onClick}>{ini(c.name)}</div>;
+}
+function Toast({msg,err}){
+  return <div className="toast" style={{background:err?'var(--red)':'var(--grn)',color:err?'#fff':'#061206'}}>{msg}</div>;
+}
 
-// ── PartaTab ───────────────────────────────────────────────────────────────
-function PartaTab({cyclists,onChange}){
-  const [name,setName]=useState('');
-  const add=()=>{
-    const n=name.trim();
-    if(!n)return;
-    onChange([...cyclists,{id:uid(),name:n,color:COLORS[cyclists.length%COLORS.length]}]);
-    setName('');
-  };
-  const remove=id=>{
-    if(confirm('Odebrat cyklistu?'))onChange(cyclists.filter(c=>c.id!==id));
-  };
-  const pWord=n=>n===1?'cyklista':n<5?'cyklisté':'cyklistů';
+/* ── PERSON MODAL ── */
+function PersonModal({cyclist,cyclists,rounds,settlements,bal,onClose}){
+  const v=bal[cyclist.id]||0;
+  const pos=v>0.005,neg=v<-0.005;
+  const bc=pos?'var(--grn)':neg?'var(--red)':'var(--tx2)';
+  const myRounds=[...rounds].filter(r=>r.participants.includes(cyclist.id)).sort((a,b)=>new Date(b.date)-new Date(a.date));
+  const mySettles=(settlements||[]).filter(s=>s.from===cyclist.id||s.to===cyclist.id).sort((a,b)=>new Date(b.date)-new Date(a.date));
+  let bought=0,consumed=0;
+  myRounds.forEach(r=>{const pp=r.beerCount/r.participants.length;consumed+=pp;if(r.buyer===cyclist.id)bought+=r.beerCount;});
+  return(
+    <div className="overlay" onClick={e=>{if(e.target===e.currentTarget)onClose();}}>
+      <div className="sheet">
+        <div className="sh-handle"/>
+        <div style={{display:'flex',alignItems:'center',gap:14,marginBottom:18}}>
+          <Av c={cyclist} size="xl"/>
+          <div style={{flex:1}}>
+            <div style={{fontSize:22,fontWeight:900,color:'var(--tx)'}}>{cyclist.name}</div>
+            <div style={{fontSize:13,color:bc,fontWeight:700,marginTop:2}}>
+              {pos?'Ostatní mu dluží '+v.toFixed(1)+' 🍺':neg?'Dluží ostatním '+Math.abs(v).toFixed(1)+' 🍺':'Vyrovnán ✓'}
+            </div>
+          </div>
+          <button onClick={onClose} style={{background:'var(--s3)',border:'none',cursor:'pointer',color:'var(--tx2)',borderRadius:10,padding:8,display:'flex'}}><IClose/></button>
+        </div>
+        <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:8,marginBottom:18}}>
+          {[['🛒',bought.toFixed(1),'Koupil'],['🍺',consumed.toFixed(1),'Vypil'],['🚴',myRounds.length+'×','Výletů']].map(([ico,val,lbl])=>(
+            <div key={lbl} style={{background:'var(--s2)',borderRadius:'var(--rsm)',padding:'10px 8px',textAlign:'center',border:'1px solid var(--bd)'}}>
+              <div style={{fontSize:18,marginBottom:2}}>{ico}</div>
+              <div style={{fontSize:20,fontWeight:900,color:'var(--acc)',fontFamily:"Impact,'Arial Black',sans-serif",lineHeight:1.2}}>{val}</div>
+              <div style={{fontSize:10,color:'var(--tx2)',textTransform:'uppercase',letterSpacing:'.06em',marginTop:3}}>{lbl}</div>
+            </div>
+          ))}
+        </div>
+        {myRounds.length>0&&<>
+          <div className="sec" style={{marginTop:0}}>Rundy</div>
+          {myRounds.slice(0,8).map(r=>{
+            const bo=cyclists.find(c=>c.id===r.buyer);
+            const pp=r.beerCount/r.participants.length;
+            const wasBuyer=r.buyer===cyclist.id;
+            return(
+              <div key={r.id} style={{display:'flex',alignItems:'center',gap:12,padding:'10px 0',borderBottom:'1px solid var(--bd)'}}>
+                <div style={{width:36,height:36,borderRadius:'var(--rsm)',background:wasBuyer?'var(--asoft)':'var(--s2)',border:'1px solid '+(wasBuyer?'var(--aline)':'var(--bd)'),display:'flex',alignItems:'center',justifyContent:'center',fontSize:16,flexShrink:0}}>
+                  {wasBuyer?'🛒':'🍺'}
+                </div>
+                <div style={{flex:1}}>
+                  <div style={{fontSize:13,fontWeight:700}}>{fmt(r.date)}</div>
+                  <div style={{fontSize:12,color:'var(--tx2)'}}>
+                    {wasBuyer?'Koupil '+r.beerCount+' piv pro '+r.participants.length+' lidi':'Vypil '+pp.toFixed(2)+' 🍺 — platil '+(bo?bo.name:'?')}
+                  </div>
+                </div>
+                <div style={{fontSize:13,fontWeight:700,color:wasBuyer?'var(--acc)':'var(--red)'}}>
+                  {wasBuyer?'+'+(r.beerCount-pp).toFixed(1):'-'+pp.toFixed(1)}
+                </div>
+              </div>
+            );
+          })}
+        </>}
+        {mySettles.length>0&&<>
+          <div className="sec">Vyrovnání</div>
+          {mySettles.map(s=>{
+            const other=cyclists.find(c=>c.id===(s.from===cyclist.id?s.to:s.from));
+            const gave=s.from===cyclist.id;
+            return(
+              <div key={s.id} style={{display:'flex',alignItems:'center',gap:12,padding:'10px 0',borderBottom:'1px solid var(--bd)'}}>
+                <div style={{width:36,height:36,borderRadius:'var(--rsm)',background:'var(--bsoft)',border:'1px solid var(--bline)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:16,flexShrink:0}}>🤝</div>
+                <div style={{flex:1}}>
+                  <div style={{fontSize:13,fontWeight:700}}>{fmt(s.date)}</div>
+                  <div style={{fontSize:12,color:'var(--tx2)'}}>{gave?'Vrátil → '+(other?other.name:'?'):'Dostal od '+(other?other.name:'?')}</div>
+                </div>
+                <div style={{fontSize:13,fontWeight:700,color:gave?'var(--grn)':'var(--blu)'}}>{gave?'+':'-'}{s.amount.toFixed(1)} 🍺</div>
+              </div>
+            );
+          })}
+        </>}
+      </div>
+    </div>
+  );
+}
+
+/* ── SETTLE MODAL ── */
+function SettleModal({debt,onConfirm,onClose}){
+  const [val,setVal]=useState(debt.amt.toFixed(1));
+  const amt=parseFloat(val)||0;
+  const valid=amt>0.005&&amt<=debt.amt+0.005;
+  return(
+    <div className="overlay" onClick={e=>{if(e.target===e.currentTarget)onClose();}}>
+      <div className="sheet">
+        <div className="sh-handle"/>
+        <div style={{textAlign:'center',marginBottom:20}}>
+          <div style={{fontSize:36,marginBottom:8}}>🤝</div>
+          <div style={{fontSize:18,fontWeight:900}}>Zaznamenat vyrovnání</div>
+          <div style={{fontSize:13,color:'var(--tx2)',marginTop:4}}>
+            <b style={{color:'var(--red)'}}>{debt.from.name}</b> vrátí <b style={{color:'var(--grn)'}}>{debt.to.name}</b>
+          </div>
+        </div>
+        <div style={{display:'flex',alignItems:'center',gap:10,background:'var(--s2)',borderRadius:'var(--r)',padding:'14px 16px',marginBottom:16}}>
+          <Av c={debt.from} size="lg"/>
+          <div style={{flex:1}}>
+            <div style={{fontSize:11,color:'var(--red)',fontWeight:800,textTransform:'uppercase',letterSpacing:'.07em'}}>dluží</div>
+            <div style={{fontSize:15,fontWeight:800}}>{debt.from.name}</div>
+          </div>
+          <IArrow/>
+          <div style={{flex:1,textAlign:'right'}}>
+            <div style={{fontSize:11,color:'var(--grn)',fontWeight:800,textTransform:'uppercase',letterSpacing:'.07em'}}>dostane</div>
+            <div style={{fontSize:15,fontWeight:800}}>{debt.to.name}</div>
+          </div>
+          <Av c={debt.to} size="lg"/>
+        </div>
+        <span className="flbl">Kolik piv se vyrovnává?</span>
+        <div style={{display:'flex',gap:8,marginBottom:6}}>
+          <input type="number" min="0.1" step="0.1" value={val} onChange={e=>setVal(e.target.value)} style={{fontSize:20,fontWeight:700,textAlign:'center'}}/>
+          <button className="btn btn-g" style={{flexShrink:0}} onClick={()=>setVal(debt.amt.toFixed(1))}>Vše</button>
+        </div>
+        <div className="ntxt" style={{marginBottom:18}}>
+          Celkem dluží: {debt.amt.toFixed(1)} 🍺{amt>0.005&&amt<debt.amt-0.01?' — po vyrovnání zbyde '+(debt.amt-amt).toFixed(1)+' 🍺':''}
+        </div>
+        <div style={{display:'flex',gap:8}}>
+          <button className="btn btn-g" style={{flex:1}} onClick={onClose}>Zrušit</button>
+          <button className="btn btn-y" style={{flex:2}} disabled={!valid} onClick={()=>onConfirm(amt)}>✓ Zaznamenat</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ══ BILANCE TAB ══ */
+function BilanceTab({cyclists,rounds,settlements,onTabChange,onSettle,onPersonClick}){
+  const [view,setView]=useState('dluhy');
+  const [settling,setSettling]=useState(null);
+
+  if(!cyclists.length)return(<div className="empty fade"><div className="eico">🚴</div><p>Přidej cyklisty<br/>v záložce <b style={{color:'var(--acc)'}}>Parta</b>.</p></div>);
+  if(!rounds.length)return(
+    <div className="empty fade"><div className="eico">🍺</div><p>Zatím žádné rundy.</p>
+      {cyclists.length>=2&&<button className="btn btn-y" style={{marginTop:16}} onClick={()=>onTabChange('runda')}>+ Zapsat rundu</button>}
+    </div>
+  );
+
+  const bal=calcBal(cyclists,rounds,settlements);
+  const sets=calcSet(bal,cyclists);
+  const total=rounds.reduce((s,r)=>s+r.beerCount,0);
+  const bought={},consumed={},rides={};
+  cyclists.forEach(c=>{bought[c.id]=0;consumed[c.id]=0;rides[c.id]=0;});
+  rounds.forEach(r=>{
+    const n=r.participants.length;if(!n)return;const pp=r.beerCount/n;
+    r.participants.forEach(pid=>{consumed[pid]=(consumed[pid]||0)+pp;rides[pid]=(rides[pid]||0)+1;if(pid===r.buyer)bought[pid]=(bought[pid]||0)+r.beerCount;});
+  });
+  const buyCount={};rounds.forEach(r=>{buyCount[r.buyer]=(buyCount[r.buyer]||0)+1;});
+  const topId=Object.keys(buyCount).sort((a,b)=>(buyCount[b]||0)-(buyCount[a]||0))[0];
+  const topBuyer=cyclists.find(c=>c.id===topId);
+  const sorted=[...cyclists].sort((a,b)=>(bal[b.id]||0)-(bal[a.id]||0));
+  const mxAbs=Math.max(...cyclists.map(c=>Math.abs(bal[c.id]||0)),0.1);
+  const avg=rounds.length?total/rounds.length:0;
+
+  const doSettle=(debt,amt)=>{onSettle({id:uid(),date:today(),from:debt.from.id,to:debt.to.id,amount:amt});setSettling(null);};
+
   return(
     <div className="fade">
-      <div className="section-title">Přidat cyklistu</div>
-      <div className="card">
-        <div className="add-row">
-          <input type="text" placeholder="Jméno…" value={name} maxLength={30}
-            onChange={e=>setName(e.target.value)}
-            onKeyDown={e=>e.key==='Enter'&&add()} />
-          <button className="btn btn-p" onClick={add} disabled={!name.trim()} style={{padding:'10px 16px',fontSize:20}}>+</button>
+      {settling&&<SettleModal debt={settling} onConfirm={amt=>doSettle(settling,amt)} onClose={()=>setSettling(null)}/>}
+      <div className="pad" style={{paddingBottom:0}}>
+        <div className="sg">
+          <div className="sb"><div className="sn">{total}</div><div className="sl">Piv celkem</div></div>
+          <div className="sb"><div className="sn">{rounds.length}</div><div className="sl">Rund</div></div>
+          <div className="sb" style={{background:sets.length===0?'var(--gsoft)':'var(--rsoft)',borderColor:sets.length===0?'var(--gline)':'var(--rline)'}}>
+            <div className="sn" style={{color:sets.length===0?'var(--grn)':'var(--red)'}}>{sets.length===0?'✓':sets.length}</div>
+            <div className="sl" style={{color:sets.length===0?'var(--grn)':'var(--red)'}}>{sets.length===0?'OK':sets.length===1?'Dluh':'Dluhy'}</div>
+          </div>
+        </div>
+        <div style={{display:'flex',background:'var(--s2)',borderRadius:'var(--rsm)',padding:3,marginBottom:16,gap:3,border:'1px solid var(--bd)'}}>
+          {[['dluhy','💸 Kdo dluží komu'],['osoby','👤 Přehled osoby']].map(([k,lbl])=>(
+            <button key={k} onClick={()=>setView(k)} style={{flex:1,padding:'8px 0',border:'none',borderRadius:7,fontSize:12,fontWeight:800,cursor:'pointer',transition:'all .15s',background:view===k?'var(--s4)':'transparent',color:view===k?'var(--tx)':'var(--tx3)'}}>
+              {lbl}
+            </button>
+          ))}
         </div>
       </div>
 
-      <div className="section-title">{cyclists.length} {pWord(cyclists.length)}</div>
-      {cyclists.length===0?(
-        <div className="empty-state"><div className="empty-icon">🚴</div><p>Zatím žádní cyklisté.<br/>Přidej partu!</p></div>
-      ):(
-        <div className="card">
-          {cyclists.map((c,i)=>(
-            <div key={c.id} className="cyclist-row">
-              <Av c={c} size="lg"/>
-              <span className="c-name">{c.name}</span>
-              <button className="del-btn" onClick={()=>remove(c.id)}><IcoTrash/></button>
+      {view==='dluhy'&&(
+        <div className="pad" style={{paddingTop:0}}>
+          {sets.length===0?(
+            <div style={{borderRadius:'var(--r)',padding:'24px 20px',background:'var(--gsoft)',border:'1px solid var(--gline)',textAlign:'center',marginBottom:14}}>
+              <div style={{fontSize:44,marginBottom:10}}>🎉</div>
+              <div style={{fontSize:20,fontWeight:900,color:'var(--grn)'}}>Nikdo nikomu nic nedluží!</div>
+              <div style={{fontSize:13,color:'var(--tx2)',marginTop:5}}>Všechno je vyrovnané. Tak se jezdí!</div>
             </div>
-          ))}
+          ):(
+            <>
+              <div style={{fontSize:13,color:'var(--tx2)',marginBottom:14,lineHeight:1.7}}>
+                Aby bylo vše vyrovnané, stačí <b style={{color:'var(--tx)'}}>{sets.length===1?'tato 1 transakce':'tyto '+sets.length+' transakce'}</b>. Klepnutím zaznamenat splacení:
+              </div>
+              {sets.map((s,i)=>(
+                <div key={i} className="dc">
+                  <div className="dc-top">
+                    <Av c={s.from} size="xl" onClick={()=>onPersonClick(s.from)}/>
+                    <div style={{flex:1}}>
+                      <div className="dc-lbl" style={{color:'var(--red)'}}>dluží</div>
+                      <div className="dc-name">{s.from.name}</div>
+                      <div className="dc-sub">zaplatil méně, než vypil</div>
+                    </div>
+                    <div>
+                      <div className="dc-amt">{s.amt.toFixed(1)}</div>
+                      <div className="dc-unit">🍺 {bw(Math.round(s.amt))}</div>
+                    </div>
+                  </div>
+                  <div className="dc-sep">
+                    <div className="dc-sep-line"/><div className="dc-sep-txt">ZAPLATÍ ZPĚT</div><div className="dc-sep-line"/>
+                  </div>
+                  <div className="dc-bot">
+                    <Av c={s.to} size="lg" onClick={()=>onPersonClick(s.to)}/>
+                    <div style={{flex:1}}>
+                      <div className="dc-lbl" style={{color:'var(--grn)'}}>dostane zpět</div>
+                      <div className="dc-bot-name">{s.to.name}</div>
+                    </div>
+                    <div style={{fontSize:26,fontWeight:900,color:'var(--grn)',fontFamily:"Impact,'Arial Black',sans-serif"}}>{s.amt.toFixed(1)} 🍺</div>
+                  </div>
+                  <div className="dc-actions">
+                    <button className="btn btn-b btn-w" style={{fontSize:13}} onClick={()=>setSettling(s)}>
+                      🤝 Zaznamenat vyrovnání
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </>
+          )}
+          <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:9,marginTop:4,marginBottom:12}}>
+            <div className="sb"><div className="sn">{avg.toFixed(1)}</div><div className="sl">Piv / runda</div></div>
+            <div className="sb"><div className="sn">{(settlements||[]).length}</div><div className="sl">Vyrovnání</div></div>
+          </div>
+          {topBuyer&&<div style={{display:'flex',alignItems:'center',gap:12,padding:'12px 15px',background:'var(--asoft)',border:'1px solid var(--aline)',borderRadius:'var(--r)',cursor:'pointer'}} onClick={()=>onPersonClick(topBuyer)}>
+            <Av c={topBuyer} size="md"/>
+            <div>
+              <div style={{fontSize:11,fontWeight:800,color:'var(--acc)',letterSpacing:'.07em',textTransform:'uppercase'}}>Šampión kola 🏆</div>
+              <div style={{fontSize:14,fontWeight:700}}>{topBuyer.name} — platil {buyCount[topId]}× jako první</div>
+            </div>
+          </div>}
+        </div>
+      )}
+
+      {view==='osoby'&&(
+        <div className="pad" style={{paddingTop:0}}>
+          <div style={{fontSize:13,color:'var(--tx2)',marginBottom:14}}>Klepni na kartu pro detail. Zelená = ostatní mu dluží, červená = dluží ostatním.</div>
+          {sorted.map(c=>{
+            const v=bal[c.id]||0;
+            const pos=v>0.005,neg=v<-0.005;
+            const w=Math.abs(v)/mxAbs*100;
+            const bc=pos?'var(--grn)':neg?'var(--red)':'var(--tx2)';
+            const bgc=pos?'var(--gsoft)':neg?'var(--rsoft)':'var(--s2)';
+            const bdc=pos?'var(--gline)':neg?'var(--rline)':'var(--bd)';
+            const st=pos?'ostatní mu dluží':neg?'dluží ostatním':'vyrovnán ✓';
+            return(
+              <div key={c.id} className="pc" style={{borderColor:bdc}} onClick={()=>onPersonClick(c)}>
+                <div style={{height:4,background:'var(--s3)'}}>
+                  <div style={{width:w+'%',height:'100%',borderRadius:2,transition:'width .6s',background:bc,opacity:.8}}/>
+                </div>
+                <div className="pc-top" style={{background:bgc}}>
+                  <Av c={c} size="lg"/>
+                  <div style={{flex:1}}>
+                    <div className="pc-st" style={{color:bc}}>{st}</div>
+                    <div className="pc-name">{c.name}</div>
+                  </div>
+                  <div>
+                    <div className="pc-bal" style={{color:bc}}>{pos?'+':''}{v.toFixed(1)}</div>
+                    <div style={{fontSize:11,color:'var(--tx2)',textAlign:'right'}}>🍺</div>
+                  </div>
+                </div>
+                <div className="pc-tags">
+                  <span className="ptag">🛒 {(bought[c.id]||0).toFixed(1)} koupil</span>
+                  <span className="ptag">🍺 {(consumed[c.id]||0).toFixed(1)} vypil</span>
+                  <span className="ptag">🚴 {rides[c.id]||0}× jel</span>
+                </div>
+              </div>
+            );
+          })}
+          <div style={{fontSize:12,color:'var(--tx3)',textAlign:'center',marginTop:6,fontStyle:'italic'}}>+ = ostatní ti dluží &nbsp;·&nbsp; − = ty dlužíš ostatním</div>
         </div>
       )}
     </div>
   );
 }
 
-// ── RundaTab ───────────────────────────────────────────────────────────────
+/* ══ PARTA TAB ══ */
+function PartaTab({cyclists,onChange,onPersonClick}){
+  const [name,setName]=useState('');
+  const add=()=>{const n=name.trim();if(!n)return;onChange([...cyclists,{id:uid(),name:n,color:COLS[cyclists.length%COLS.length]}]);setName('');};
+  const del=id=>{if(confirm('Odebrat cyklistu?'))onChange(cyclists.filter(c=>c.id!==id));};
+  const pw=n=>n===1?'cyklista':n<5?'cyklisté':'cyklistů';
+  return(
+    <div className="fade pad">
+      <div className="sec">Přidat cyklistu</div>
+      <div className="card">
+        <div style={{display:'flex',gap:8}}>
+          <input type="text" placeholder="Jméno…" value={name} maxLength={30} onChange={e=>setName(e.target.value)} onKeyDown={e=>e.key==='Enter'&&add()}/>
+          <button className="btn btn-y" onClick={add} disabled={!name.trim()} style={{padding:'10px 18px',fontSize:22,flexShrink:0}}>+</button>
+        </div>
+      </div>
+      <div className="sec">{cyclists.length} {pw(cyclists.length)} v partě</div>
+      {cyclists.length===0
+        ?<div className="empty" style={{padding:'30px 0'}}><div className="eico">🚴</div><p>Přidej cyklisty!</p></div>
+        :<div className="card">{cyclists.map(c=>(
+            <div key={c.id} className="crow">
+              <Av c={c} size="lg" onClick={()=>onPersonClick(c)}/>
+              <span style={{flex:1,fontWeight:700,fontSize:15,cursor:'pointer'}} onClick={()=>onPersonClick(c)}>{c.name}</span>
+              <button className="dbtn" onClick={()=>del(c.id)}><ITrash/></button>
+            </div>
+          ))}</div>
+      }
+    </div>
+  );
+}
+
+/* ══ RUNDA TAB ══ */
 function RundaTab({cyclists,onAdd}){
   const [parts,setParts]=useState([]);
   const [buyer,setBuyer]=useState(null);
   const [beers,setBeers]=useState(4);
   const [date,setDate]=useState(today());
   const [note,setNote]=useState('');
-
-  const toggle=id=>{
-    if(parts.includes(id)){
-      const np=parts.filter(p=>p!==id);
-      setParts(np);
-      if(buyer===id)setBuyer(np[0]||null);
-    } else {
-      const np=[...parts,id];
-      setParts(np);
-      if(!buyer)setBuyer(id);
-    }
-  };
-
+  const toggle=id=>{if(parts.includes(id)){const np=parts.filter(p=>p!==id);setParts(np);if(buyer===id)setBuyer(np[0]||null);}else{const np=[...parts,id];setParts(np);if(!buyer)setBuyer(id);}};
   const canGo=parts.length>=2&&buyer&&beers>0;
-  const perPerson=parts.length>0?(beers/parts.length):0;
-  const buyerObj=cyclists.find(c=>c.id===buyer);
-
-  const submit=()=>{
-    if(!canGo)return;
-    onAdd({id:uid(),date,participants:parts,buyer,beerCount:beers,note:note.trim()});
-    setParts([]);setBuyer(null);setBeers(4);setNote('');setDate(today());
-  };
-
-  if(cyclists.length<2)return(
-    <div className="empty-state fade"><div className="empty-icon">👥</div><p>Přidej alespoň 2 cyklisty<br/>v záložce Parta.</p></div>
-  );
-
+  const pp=parts.length>0?beers/parts.length:0;
+  const bo=cyclists.find(c=>c.id===buyer);
+  const submit=()=>{if(!canGo)return;onAdd({id:uid(),date,participants:parts,buyer,beerCount:beers,note:note.trim()});setParts([]);setBuyer(null);setBeers(4);setNote('');setDate(today());};
+  if(cyclists.length<2)return(<div className="empty fade"><div className="eico">👥</div><p>Přidej alespoň 2 cyklisty<br/>v záložce <b style={{color:'var(--acc)'}}>Parta</b>.</p></div>);
   return(
-    <div className="fade">
-      <div className="form-lbl">Datum výletu</div>
-      <input type="date" value={date} onChange={e=>setDate(e.target.value)} style={{marginBottom:14}}/>
-
-      <div className="form-lbl">Kdo jel? <span style={{color:'var(--text3)',fontWeight:400,textTransform:'none',letterSpacing:0}}>({parts.length} vybráno)</span></div>
-      <div className="chips" style={{marginBottom:14}}>
+    <div className="fade pad">
+      <span className="flbl">Datum výletu</span>
+      <input type="date" value={date} onChange={e=>setDate(e.target.value)} style={{marginBottom:16}}/>
+      <span className="flbl">Kdo jel? <span style={{color:'var(--tx3)',fontWeight:400,textTransform:'none',letterSpacing:0}}>({parts.length} vybráno)</span></span>
+      <div className="chips" style={{marginBottom:16}}>
         {cyclists.map(c=>(
-          <button key={c.id} className={`chip${parts.includes(c.id)?' sel':''}`}
-            style={parts.includes(c.id)?{background:c.color}:{}}
-            onClick={()=>toggle(c.id)}>{c.name}</button>
+          <button key={c.id} className={'chip'+(parts.includes(c.id)?' on':'')} style={parts.includes(c.id)?{background:c.color}:{}} onClick={()=>toggle(c.id)}>{c.name}</button>
         ))}
       </div>
-
       {parts.length>=2&&<>
-        <div className="form-lbl">Kdo platil? <span style={{color:'var(--text3)',fontWeight:400,textTransform:'none',letterSpacing:0}}>(klikni na jméno)</span></div>
-        <div className="chips" style={{marginBottom:14}}>
-          {parts.map(pid=>{
-            const c=cyclists.find(x=>x.id===pid);if(!c)return null;
-            const isBuyer=buyer===pid;
-            return(
-              <button key={pid}
-                className={`chip${isBuyer?' sel buyer-ring':''}`}
-                style={isBuyer?{background:c.color}:{}}
-                onClick={()=>setBuyer(pid)}>
-                {isBuyer&&<IcoCheck/>}{c.name}
-              </button>
-            );
-          })}
+        <span className="flbl">Kdo platil?</span>
+        <div className="chips" style={{marginBottom:16}}>
+          {parts.map(pid=>{const c=cyclists.find(x=>x.id===pid);if(!c)return null;const isB=buyer===pid;return(
+            <button key={pid} className={'chip'+(isB?' on star':'')} style={isB?{background:c.color}:{}} onClick={()=>setBuyer(pid)}>{isB&&<ICheck/>}{c.name}</button>
+          );})}
         </div>
-
-        <div className="form-lbl">Počet koupených piv</div>
-        <div className="stepper" style={{marginBottom:6}}>
-          <button className="step-btn" onClick={()=>setBeers(b=>Math.max(1,b-1))}>−</button>
-          <div className="step-val">🍺 {beers}</div>
-          <button className="step-btn" onClick={()=>setBeers(b=>b+1)}>+</button>
+        <span className="flbl">Počet koupených piv</span>
+        <div className="step" style={{marginBottom:6}}>
+          <button className="stepb" onClick={()=>setBeers(b=>Math.max(1,b-1))}>−</button>
+          <div className="stepv">🍺 {beers}</div>
+          <button className="stepb" onClick={()=>setBeers(b=>b+1)}>+</button>
         </div>
-        {parts.length>=2&&<div className="note-text" style={{marginBottom:14}}>
-          = {perPerson.toFixed(2)} piva na osobu při {parts.length} cyklistech
-        </div>}
-
-        <div className="form-lbl">Poznámka <span style={{color:'var(--text3)',fontWeight:400,textTransform:'none',letterSpacing:0}}>(volitelné)</span></div>
-        <input type="text" placeholder="Kde jsme se stavili…" value={note}
-          onChange={e=>setNote(e.target.value)} style={{marginBottom:14}}/>
-
+        <div className="ntxt" style={{marginBottom:16}}>{pp.toFixed(2)} piva/os. pro {parts.length} cyklistů</div>
+        <span className="flbl">Poznámka <span style={{color:'var(--tx3)',fontWeight:400,textTransform:'none',letterSpacing:0}}>(volitelné)</span></span>
+        <input type="text" placeholder="Na Červeném mlýně…" value={note} onChange={e=>setNote(e.target.value)} style={{marginBottom:16}}/>
         {buyer&&(
-          <div className="preview-box">
-            <b>{buyerObj?.name}</b> koupil {beers} {beerWord(beers)} pro {parts.length} {parts.length===1?'cyklistu':parts.length<5?'cyklisty':'cyklistů'}.<br/>
-            Každý z ostatních mu dluží <b>{perPerson.toFixed(2)}</b> piva.
+          <div style={{background:'var(--asoft)',border:'1px solid var(--aline)',borderRadius:'var(--r)',padding:'14px 16px',marginBottom:16}}>
+            <div style={{fontSize:11,fontWeight:800,color:'var(--acc)',letterSpacing:'.07em',textTransform:'uppercase',marginBottom:8}}>Shrnutí rundy</div>
+            <div style={{fontSize:14,lineHeight:1.9}}>
+              <b style={{color:'var(--acc)'}}>{bo&&bo.name}</b> koupil <b style={{color:'var(--acc)'}}>{beers} {bw(beers)}</b> pro {parts.length} lidi.<br/>
+              Každý mu bude dlužit <b style={{color:'var(--acc)'}}>{pp.toFixed(2)} piva</b>.
+            </div>
+            <div style={{marginTop:10,borderTop:'1px solid var(--aline)',paddingTop:10}}>
+              {parts.filter(pid=>pid!==buyer).map(pid=>{const c=cyclists.find(x=>x.id===pid);if(!c)return null;return(
+                <div key={pid} style={{display:'flex',alignItems:'center',gap:8,marginBottom:5}}>
+                  <Av c={c} size="sm"/><span style={{fontSize:12,color:'var(--tx2)',flex:1}}>{c.name}</span>
+                  <span style={{fontSize:12,fontWeight:700,color:'var(--red)'}}>−{pp.toFixed(2)} 🍺</span>
+                </div>
+              );})}
+            </div>
           </div>
         )}
-
-        <button className="btn btn-p btn-full" onClick={submit} disabled={!canGo}>
-          Zapsat rundu ✓
-        </button>
+        <button className="btn btn-y btn-w" onClick={submit} disabled={!canGo} style={{fontSize:16}}>✓ Zapsat rundu</button>
       </>}
     </div>
   );
 }
 
-// ── BilanceTab ─────────────────────────────────────────────────────────────
-function BilanceTab({cyclists,rounds}){
-  if(!cyclists.length)return(
-    <div className="empty-state fade"><div className="empty-icon">📊</div><p>Zatím žádná data.</p></div>
-  );
-
-  const bal=calcBalances(cyclists,rounds);
-  const sets=calcSettlements(bal,cyclists);
-  const maxAbs=Math.max(...cyclists.map(c=>Math.abs(bal[c.id]||0)),.1);
-
-  const totalBeers=rounds.reduce((s,r)=>s+r.beerCount,0);
-  const buyCount={};
-  rounds.forEach(r=>{buyCount[r.buyer]=(buyCount[r.buyer]||0)+1});
-  const topBuyerId=Object.keys(buyCount).sort((a,b)=>buyCount[b]-buyCount[a])[0];
-  const topBuyer=cyclists.find(c=>c.id===topBuyerId);
-
-  const sorted=[...cyclists].sort((a,b)=>(bal[b.id]||0)-(bal[a.id]||0));
-
+/* ══ HISTORIE TAB ══ */
+function HistorieTab({cyclists,rounds,settlements,onDelete,onPersonClick}){
+  const [filter,setFilter]=useState('vse');
+  const allItems=[...rounds.map(r=>({...r,_t:'r'})),...(settlements||[]).map(s=>({...s,_t:'s'}))].sort((a,b)=>new Date(b.date)-new Date(a.date));
+  const items=filter==='vse'?allItems:filter==='rundy'?allItems.filter(x=>x._t==='r'):allItems.filter(x=>x._t==='s');
+  if(!rounds.length&&!(settlements||[]).length)return(<div className="empty fade"><div className="eico">🍺</div><p>Zatím žádné záznamy.</p></div>);
   return(
-    <div className="fade">
-      <div className="stats-grid">
-        <div className="stat-box"><div className="stat-n">{totalBeers}</div><div className="stat-l">Piv celkem</div></div>
-        <div className="stat-box"><div className="stat-n">{rounds.length}</div><div className="stat-l">Rund</div></div>
-        <div className="stat-box"><div className="stat-n">{cyclists.length}</div><div className="stat-l">Cyklistů</div></div>
+    <div className="fade pad">
+      <div style={{display:'flex',gap:6,marginBottom:14}}>
+        {[['vse','Vše'],['rundy','Rundy 🍺'],['vyrovnani','Vyrovnání 🤝']].map(([k,lbl])=>(
+          <button key={k} onClick={()=>setFilter(k)} style={{padding:'6px 12px',border:'1px solid '+(filter===k?'var(--acc)':'var(--bd)'),borderRadius:20,fontSize:12,fontWeight:700,cursor:'pointer',background:filter===k?'var(--asoft)':'transparent',color:filter===k?'var(--acc)':'var(--tx2)',transition:'all .15s'}}>
+            {lbl}
+          </button>
+        ))}
       </div>
-
-      {topBuyer&&rounds.length>0&&(
-        <div style={{marginBottom:14}}>
-          <div className="top-buyer-badge">
-            <Av c={topBuyer} size="sm"/>
-            🏆 Nejvíce kol: {topBuyer.name} ({buyCount[topBuyerId]}×)
-          </div>
-        </div>
-      )}
-
-      <div className="section-title">Přehled bilancí</div>
-      <div className="card" style={{paddingBottom:4}}>
-        {sorted.map(c=>{
-          const v=bal[c.id]||0;
-          const pos=v>0.005,neg=v<-0.005;
-          const w=Math.abs(v)/maxAbs*100;
+      {items.map(item=>{
+        if(item._t==='r'){
+          const r=item;
+          const bo=cyclists.find(c=>c.id===r.buyer);
+          const ps=r.participants.map(pid=>cyclists.find(c=>c.id===pid)).filter(Boolean);
+          const pp=r.beerCount/r.participants.length;
           return(
-            <div key={c.id} className="bal-item">
-              <Av c={c} size="sm"/>
-              <span style={{fontSize:13,fontWeight:600,minWidth:65,flexShrink:0}}>{c.name}</span>
-              <div className="bal-bar-bg">
-                <div className="bal-bar" style={{width:`${w}%`,background:pos?'var(--green)':neg?'var(--red)':'var(--s4)'}}/>
+            <div key={'r'+r.id} className="rc">
+              <div className="rc-top">
+                <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start',marginBottom:8}}>
+                  <div><div style={{fontSize:12,color:'var(--tx2)',marginBottom:3}}>{fmt(r.date)}</div>
+                    <div style={{fontSize:26,fontWeight:900,color:'var(--acc)',fontFamily:"Impact,'Arial Black',sans-serif",lineHeight:1}}>{r.beerCount} 🍺</div>
+                  </div>
+                  <button className="dbtn" onClick={()=>onDelete(r.id)}><ITrash/></button>
+                </div>
+                <div style={{display:'flex',alignItems:'center',gap:10}}>
+                  {bo&&<Av c={bo} size="sm" onClick={()=>onPersonClick(bo)}/>}
+                  <div style={{fontSize:13,color:'var(--tx2)'}}>Platil <b style={{color:'var(--tx)'}}>{bo?bo.name:'?'}</b> · {pp.toFixed(2)} 🍺/os.</div>
+                </div>
               </div>
-              <span className={`bal-val ${pos?'pos':neg?'neg':'zero'}`}>
-                {pos?'+':''}{v.toFixed(1)} 🍺
-              </span>
+              <div className="rc-bot">
+                <div style={{fontSize:11,color:'var(--tx3)',marginBottom:6,fontWeight:700,textTransform:'uppercase',letterSpacing:'.07em'}}>Účastníci ({ps.length})</div>
+                <div style={{display:'flex',flexWrap:'wrap',gap:7}}>
+                  {ps.map(c=>(
+                    <div key={c.id} style={{display:'flex',alignItems:'center',gap:5,cursor:'pointer'}} onClick={()=>onPersonClick(c)}>
+                      <Av c={c} size="sm"/><span style={{fontSize:12,color:'var(--tx2)',fontWeight:600}}>{c.name}</span>
+                    </div>
+                  ))}
+                </div>
+                {r.note&&<div style={{fontSize:12,color:'var(--tx3)',fontStyle:'italic',marginTop:8,borderTop:'1px solid var(--bd)',paddingTop:8}}>📍 {r.note}</div>}
+              </div>
             </div>
           );
-        })}
-      </div>
-
-      {sets.length>0&&<>
-        <div className="section-title">Jak to vyrovnat</div>
-        {sets.map((s,i)=>(
-          <div key={i} className="settle">
-            <Av c={s.from} size="sm"/>
-            <div className="settle-arrow"><IcoArrow/></div>
-            <div className="settle-mid">
-              <b>{s.from.name}</b> dluží <b>{s.to.name}</b><br/>
-              <span className="settle-amt">{s.amt.toFixed(2)} 🍺 {beerWord(Math.ceil(s.amt))}</span>
-            </div>
-            <Av c={s.to} size="sm"/>
-          </div>
-        ))}
-      </>}
-
-      {sets.length===0&&rounds.length>0&&(
-        <div className="card" style={{textAlign:'center',color:'var(--green)',fontWeight:700,fontSize:15}}>
-          🎉 Vše vyrovnáno!
-        </div>
-      )}
-
-      {rounds.length===0&&(
-        <div className="empty-state" style={{paddingTop:20}}>
-          <div className="empty-icon">🍺</div>
-          <p>Zatím žádné rundy.<br/>Přidej první kolo!</p>
-        </div>
-      )}
-    </div>
-  );
-}
-
-// ── HistorieTab ────────────────────────────────────────────────────────────
-function HistorieTab({cyclists,rounds,onDelete}){
-  if(!rounds.length)return(
-    <div className="empty-state fade"><div className="empty-icon">🍺</div><p>Zatím žádné rundy.<br/>Jdi na výlet!</p></div>
-  );
-
-  const sorted=[...rounds].sort((a,b)=>new Date(b.date)-new Date(a.date));
-
-  return(
-    <div className="fade">
-      <div className="section-title">{rounds.length} {rounds.length===1?'runda':rounds.length<5?'rundy':'rund'}</div>
-      {sorted.map(r=>{
-        const buyObj=cyclists.find(c=>c.id===r.buyer);
-        const pObjs=r.participants.map(pid=>cyclists.find(c=>c.id===pid)).filter(Boolean);
-        const pp=r.beerCount/r.participants.length;
-        return(
-          <div key={r.id} className="round-card">
-            <div className="round-top">
-              <div>
-                <div className="round-beer">{r.beerCount} 🍺</div>
-                <div className="round-meta">{fmtDate(r.date)} &middot; {r.participants.length} {r.participants.length===1?'cyklista':r.participants.length<5?'cyklisté':'cyklistů'}</div>
-              </div>
-              <button className="del-btn" onClick={()=>onDelete(r.id)} title="Smazat"><IcoTrash/></button>
-            </div>
-            <div className="round-buyer-line">
-              Platil: <b>{buyObj?.name||'?'}</b> &middot; {pp.toFixed(2)} 🍺/os.
-            </div>
-            <div className="round-avatars">
-              {pObjs.map(c=>(
-                <div key={c.id} title={c.name}>
-                  <Av c={c} size="sm"/>
+        } else {
+          const s=item;
+          const fr=cyclists.find(c=>c.id===s.from);
+          const to=cyclists.find(c=>c.id===s.to);
+          return(
+            <div key={'s'+s.id} style={{background:'var(--s1)',border:'1px solid var(--bline)',borderRadius:'var(--r)',overflow:'hidden',marginBottom:10}}>
+              <div style={{padding:'13px 15px',background:'var(--bsoft)',display:'flex',alignItems:'center',gap:12}}>
+                <div style={{fontSize:24,flexShrink:0}}>🤝</div>
+                <div style={{flex:1}}>
+                  <div style={{fontSize:11,color:'var(--blu)',fontWeight:800,letterSpacing:'.07em',textTransform:'uppercase',marginBottom:4}}>Vyrovnání · {fmt(s.date)}</div>
+                  <div style={{display:'flex',alignItems:'center',gap:8,flexWrap:'wrap'}}>
+                    <span style={{display:'flex',alignItems:'center',gap:6,cursor:'pointer'}} onClick={()=>fr&&onPersonClick(fr)}>
+                      {fr&&<Av c={fr} size="sm"/>}<b style={{fontSize:13}}>{fr?fr.name:'?'}</b>
+                    </span>
+                    <IArrow/>
+                    <span style={{display:'flex',alignItems:'center',gap:6,cursor:'pointer'}} onClick={()=>to&&onPersonClick(to)}>
+                      {to&&<Av c={to} size="sm"/>}<b style={{fontSize:13}}>{to?to.name:'?'}</b>
+                    </span>
+                  </div>
                 </div>
-              ))}
+                <div style={{fontSize:22,fontWeight:900,color:'var(--blu)',fontFamily:"Impact,'Arial Black',sans-serif",flexShrink:0}}>{s.amount.toFixed(1)} 🍺</div>
+              </div>
             </div>
-            {r.note&&<div className="round-note">"{r.note}"</div>}
-          </div>
-        );
+          );
+        }
       })}
     </div>
   );
 }
 
-// ── Toast ──────────────────────────────────────────────────────────────────
-const Toast=({msg,err})=><div className="toast" style={err?{background:'var(--red)',color:'#fff'}:{}}>{msg}</div>;
-
-// ── NastaveniTab ────────────────────────────────────────────────────────────
+/* ══ NASTAVENI TAB ══ */
 function NastaveniTab({cfg,onSave}){
-  const [apiKey,setApiKey]=useState(cfg.apiKey||'');
-  const [binId,setBinId]=useState(cfg.binId||'');
-  const [creating,setCreating]=useState(false);
-  const [err,setErr]=useState('');
-  const [ok,setOk]=useState('');
-
-  const save=()=>{
-    if(!apiKey.trim()||!binId.trim()){setErr('Vyplň oba údaje.');return;}
-    onSave({apiKey:apiKey.trim(),binId:binId.trim()});
-    setOk('Uloženo! Načítám data…');setErr('');
-  };
-  const create=async()=>{
-    if(!apiKey.trim()){setErr('Nejdřív zadej API klíč.');return;}
-    setCreating(true);setErr('');setOk('');
-    try{
-      const id=await binCreate(apiKey.trim());
-      setBinId(id);
-      onSave({apiKey:apiKey.trim(),binId:id});
-      setOk(`Bin vytvořen! ID: ${id}`);
-    }catch(e){setErr(e.message);}
-    setCreating(false);
-  };
-
+  const [ak,setAk]=useState(cfg.apiKey||'');
+  const [bid,setBid]=useState(cfg.binId||'');
+  const [busy,setBusy]=useState(false);
+  const [msg,setMsg]=useState('');
+  const [isErr,setIsErr]=useState(false);
+  const show=(t,e)=>{setMsg(t);setIsErr(e);};
+  const save=()=>{if(!ak.trim()||!bid.trim()){show('Vyplň oba údaje.',true);return;}onSave({apiKey:ak.trim(),binId:bid.trim()});show('Uloženo!',false);};
+  const create=async()=>{if(!ak.trim()){show('Nejdřív zadej API klíč.',true);return;}setBusy(true);setMsg('');
+    try{const id=await bCreate(ak.trim());setBid(id);onSave({apiKey:ak.trim(),binId:id});show('Hotovo! ID: '+id,false);}
+    catch(e){show(e.message,true);}setBusy(false);};
+  const url=cfg.apiKey&&cfg.binId?shareUrl(cfg):'';
+  const copy=()=>navigator.clipboard.writeText(url).then(()=>show('Odkaz zkopírován!',false)).catch(()=>show(url,false));
   return(
-    <div className="fade">
-      <div className="card" style={{background:'var(--accent-d)',border:'1px solid rgba(240,160,32,.2)',marginBottom:14}}>
-        <div style={{fontSize:13,color:'var(--text)',lineHeight:1.7}}>
-          <b style={{color:'var(--accent)'}}>Jak na to (jednorázové nastavení):</b><br/>
-          1. Jdi na <a href="https://jsonbin.io" target="_blank" style={{color:'var(--accent)'}}>jsonbin.io</a> a zaregistruj se zdarma<br/>
-          2. Vlevo klikni na <b style={{color:'var(--accent-b)'}}>API Keys</b> → zkopíruj <b style={{color:'var(--accent-b)'}}>Master Key</b><br/>
-          3. Vlož ho níže a klikni <b style={{color:'var(--accent-b)'}}>Vytvořit nový bin</b><br/>
-          4. Hotovo — pošli URL appky klukům, ať si ji otevřou a zadají stejné údaje
+    <div className="fade pad">
+      <div style={{background:'var(--asoft)',border:'1px solid var(--aline)',borderRadius:'var(--r)',padding:'16px',marginBottom:16}}>
+        <div style={{fontSize:14,fontWeight:800,color:'var(--acc)',marginBottom:8}}>☁ Sdílená cloudová databáze</div>
+        <div style={{fontSize:13,lineHeight:1.9}}>
+          1. <a href="https://jsonbin.io" target="_blank" style={{color:'var(--acc)',fontWeight:700}}>jsonbin.io</a> — zaregistruj se zdarma<br/>
+          2. API Keys → zkopíruj <b>Master Key</b><br/>
+          3. Vlož klíč a vytvoř bin<br/>
+          4. Zkopíruj odkaz a pošli ho klukům
         </div>
       </div>
-
-      <div className="form-lbl">Master API klíč (z JSONBin.io)</div>
-      <input type="text" placeholder="$2a$10$…" value={apiKey}
-        onChange={e=>{setApiKey(e.target.value);setErr('');setOk('');}}
-        style={{marginBottom:10,fontFamily:'monospace',fontSize:12}}/>
-
-      <div className="form-lbl">Bin ID <span style={{color:'var(--text3)',fontWeight:400,textTransform:'none',letterSpacing:0}}>(vyplní se automaticky po vytvoření)</span></div>
-      <input type="text" placeholder="64abc123…" value={binId}
-        onChange={e=>{setBinId(e.target.value);setErr('');setOk('');}}
-        style={{marginBottom:12,fontFamily:'monospace',fontSize:12}}/>
-
-      {err&&<div style={{color:'var(--red)',fontSize:13,marginBottom:10}}>⚠ {err}</div>}
-      {ok&&<div style={{color:'var(--green)',fontSize:13,marginBottom:10}}>✓ {ok}</div>}
-
-      <div style={{display:'flex',gap:8,flexDirection:'column'}}>
-        <button className="btn btn-p btn-full" onClick={create} disabled={creating||!apiKey.trim()}>
-          {creating?'Vytváří se…':'✦ Vytvořit nový bin (poprvé)'}
-        </button>
-        <button className="btn btn-g btn-full" onClick={save} disabled={!apiKey.trim()||!binId.trim()}>
-          Uložit nastavení
-        </button>
+      <span className="flbl">Master API klíč</span>
+      <input type="text" placeholder="$2a$10$…" value={ak} onChange={e=>{setAk(e.target.value);setMsg('');}} style={{marginBottom:10,fontFamily:'monospace',fontSize:12}}/>
+      <span className="flbl">Bin ID</span>
+      <input type="text" placeholder="vyplní se po vytvoření" value={bid} onChange={e=>{setBid(e.target.value);setMsg('');}} style={{marginBottom:14,fontFamily:'monospace',fontSize:12}}/>
+      {msg&&<div style={{color:isErr?'var(--red)':'var(--grn)',fontSize:13,marginBottom:12,fontWeight:600}}>{msg}</div>}
+      <div style={{display:'flex',flexDirection:'column',gap:9}}>
+        <button className="btn btn-y btn-w" onClick={create} disabled={busy||!ak.trim()}>{busy?'Vytváří se…':'✦ Vytvořit nový bin (poprvé)'}</button>
+        <button className="btn btn-g btn-w" onClick={save} disabled={!ak.trim()||!bid.trim()}>Uložit nastavení</button>
       </div>
-
-      {cfg.apiKey&&cfg.binId&&(
-        <div style={{marginTop:16}}>
-          <div className="form-lbl">Sdílet s klukama</div>
-          <div style={{display:'flex',gap:8}}>
-            <input type="text" readOnly value={shareUrl(cfg)} style={{fontSize:11,fontFamily:'monospace',color:'var(--text2)'}}/>
-            <button className="btn btn-g" style={{padding:'10px 14px',flexShrink:0,whiteSpace:'nowrap'}}
-              onClick={()=>{navigator.clipboard.writeText(shareUrl(cfg)).then(()=>setOk('Odkaz zkopírován! Pošli ho klukům.')).catch(()=>setOk(shareUrl(cfg)))}}>
-              Kopírovat
-            </button>
-          </div>
-          <div className="note-text" style={{marginTop:6}}>Kdo otevře tento odkaz, automaticky se připojí ke stejné databázi.</div>
+      {url&&<div style={{marginTop:18}}>
+        <span className="flbl">Sdílet s klukama</span>
+        <div style={{display:'flex',gap:8}}>
+          <input type="text" readOnly value={url} style={{fontSize:11,fontFamily:'monospace',color:'var(--tx2)'}}/>
+          <button className="btn btn-g" style={{padding:'10px 14px',flexShrink:0,whiteSpace:'nowrap'}} onClick={copy}>Kopírovat</button>
         </div>
-      )}
+        <div className="ntxt" style={{marginTop:6}}>Kdo otevře odkaz, automaticky vidí sdílenou databázi.</div>
+      </div>}
     </div>
   );
 }
 
-// ── App ────────────────────────────────────────────────────────────────────
+/* ══ APP ══ */
 function App(){
   const [tab,setTab]=useState('bilance');
   const [cyclists,setCyclists]=useState([]);
   const [rounds,setRounds]=useState([]);
+  const [settlements,setSettlements]=useState([]);
   const [cfg,setCfg]=useState(getCfg);
-  const [syncStatus,setSyncStatus]=useState('idle'); // idle | loading | saving | error
+  const [sync,setSync]=useState('idle');
   const [loaded,setLoaded]=useState(false);
   const [toast,setToast]=useState(null);
-  const tRef=useRef(null);
-  const saveTimer=useRef(null);
-  const pendingData=useRef(null);
-
+  const [personModal,setPersonModal]=useState(null);
+  const tRef=useRef(null),sTimer=useRef(null),pending=useRef(null);
   const isReady=cfg.apiKey&&cfg.binId;
 
-  // ── load on mount / cfg change ──
   useEffect(()=>{
     if(!isReady){setLoaded(true);return;}
-    setLoaded(false);setSyncStatus('loading');
-    binLoad(cfg.apiKey,cfg.binId)
-      .then(d=>{
-        setCyclists(d.cyclists||[]);
-        setRounds(d.rounds||[]);
-        setSyncStatus('idle');setLoaded(true);
-      })
-      .catch(e=>{
-        setSyncStatus('error');setLoaded(true);
-        showToast('Nepodařilo se načíst data: '+e.message,true);
-      });
+    setSync('loading');
+    bLoad(cfg.apiKey,cfg.binId)
+      .then(d=>{setCyclists(d.cyclists||[]);setRounds(d.rounds||[]);setSettlements(d.settlements||[]);setSync('idle');setLoaded(true);})
+      .catch(e=>{setSync('error');setLoaded(true);showT('Nepodařilo se načíst: '+e.message,true);});
   },[cfg.apiKey,cfg.binId]);
 
-  // ── debounced cloud save ──
-  const cloudSave=useCallback((cyc,rnd)=>{
+  const doSave=useCallback((cyc,rnd,set)=>{
     if(!isReady)return;
-    pendingData.current={cyclists:cyc,rounds:rnd};
-    clearTimeout(saveTimer.current);
-    setSyncStatus('saving');
-    saveTimer.current=setTimeout(async()=>{
-      const d=pendingData.current;
-      try{
-        await binSave(cfg.apiKey,cfg.binId,d);
-        setSyncStatus('idle');
-      }catch(e){
-        setSyncStatus('error');
-        showToast('Chyba při ukládání: '+e.message,true);
-      }
+    pending.current={cyclists:cyc,rounds:rnd,settlements:set};
+    clearTimeout(sTimer.current);setSync('saving');
+    sTimer.current=setTimeout(async()=>{
+      const d=pending.current;
+      try{await bSave(cfg.apiKey,cfg.binId,d);setSync('idle');}
+      catch(e){setSync('error');showT('Chyba ukládání: '+e.message,true);}
     },1200);
   },[cfg.apiKey,cfg.binId,isReady]);
 
-  useEffect(()=>{if(loaded&&isReady)cloudSave(cyclists,rounds);},[cyclists,rounds,loaded]);
+  useEffect(()=>{if(loaded&&isReady)doSave(cyclists,rounds,settlements);},[cyclists,rounds,settlements,loaded]);
 
-  const showToast=(msg,err=false)=>{
-    setToast({msg,err});clearTimeout(tRef.current);
-    tRef.current=setTimeout(()=>setToast(null),2800);
-  };
-
-  const addRound=r=>{
-    setRounds(p=>[...p,r]);
-    showToast('Runda zapsána! 🍺');
-    setTab('bilance');
-  };
-  const delRound=id=>{
-    if(confirm('Smazat tuto rundu?'))setRounds(p=>p.filter(r=>r.id!==id));
-  };
-  const handleCfgSave=newCfg=>{
-    saveCfg(newCfg);setCfg(newCfg);
+  const showT=(msg,err=false)=>{setToast({msg,err});clearTimeout(tRef.current);tRef.current=setTimeout(()=>setToast(null),2800);};
+  const addRound=r=>{setRounds(p=>[...p,r]);showT('Runda zapsána! 🍺');setTab('bilance');};
+  const delRound=id=>{if(confirm('Smazat rundu?'))setRounds(p=>p.filter(r=>r.id!==id));};
+  const addSettle=s=>{setSettlements(p=>[...p,s]);showT('Vyrovnání zaznamenáno! 🤝');};
+  const saveCfgH=c=>{saveCfg(c);setCfg(c);};
+  const manSync=async()=>{
+    if(!isReady||sync==='loading')return;setSync('loading');
+    try{const d=await bLoad(cfg.apiKey,cfg.binId);setCyclists(d.cyclists||[]);setRounds(d.rounds||[]);setSettlements(d.settlements||[]);setSync('idle');showT('Synchronizováno ✓');}
+    catch(e){setSync('error');showT('Chyba: '+e.message,true);}
   };
 
-  const manualSync=async()=>{
-    if(!isReady||syncStatus==='loading')return;
-    setSyncStatus('loading');
-    try{
-      const d=await binLoad(cfg.apiKey,cfg.binId);
-      setCyclists(d.cyclists||[]);setRounds(d.rounds||[]);
-      setSyncStatus('idle');showToast('Synchronizováno ✓');
-    }catch(e){setSyncStatus('error');showToast('Chyba: '+e.message,true);}
-  };
+  const bal=loaded?calcBal(cyclists,rounds,settlements):{};
+  const debtCount=loaded?calcSet(bal,cyclists).length:0;
 
   const TABS=[
-    {k:'parta',lbl:'Parta',ico:<IcoUsers/>},
-    {k:'runda',lbl:'Runda',ico:<IcoBeer/>},
-    {k:'bilance',lbl:'Bilance',ico:<IcoChart/>},
-    {k:'historie',lbl:'Historie',ico:<IcoList/>},
-    {k:'nastaveni',lbl:'Nastavení',ico:<IcoGear/>},
+    {k:'parta',   lbl:'Parta',   ico:<IUsers/>},
+    {k:'runda',   lbl:'Runda',   ico:<IBeer/>},
+    {k:'bilance', lbl:'Bilance', ico:<IChart/>, badge:debtCount},
+    {k:'historie',lbl:'Historie',ico:<IList/>},
+    {k:'nastaveni',lbl:'Nastav.',ico:<IGear/>},
   ];
 
-  const titles={parta:'Cyklisté',runda:'Nová runda',bilance:'Přehled',historie:'Historie',nastaveni:'Nastavení'};
-
-  const syncColor=syncStatus==='saving'?'var(--accent)':syncStatus==='error'?'var(--red)':syncStatus==='loading'?'var(--accent)':'var(--text3)';
-  const syncLabel=syncStatus==='saving'?'Ukládám…':syncStatus==='loading'?'Načítám…':syncStatus==='error'?'Chyba':'Synced';
+  const sc=sync==='saving'||sync==='loading'?'var(--acc)':sync==='error'?'var(--red)':'var(--tx3)';
+  const sl=sync==='saving'?'Ukládám…':sync==='loading'?'Načítám…':sync==='error'?'Chyba':'Synced';
 
   if(!loaded)return(
-    <div style={{flex:1,display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',gap:12,color:'var(--text2)'}}>
-      <div style={{fontSize:36}}>🍺</div>
-      <div style={{fontSize:14}}>{isReady?'Načítám data…':'Připojuji se…'}</div>
+    <div style={{flex:1,display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',gap:14,color:'var(--tx2)'}}>
+      <div style={{fontSize:48}}>🍺</div><div style={{fontSize:15,fontWeight:600}}>Načítám data…</div>
     </div>
   );
+
+  const modalC=personModal?cyclists.find(c=>c.id===personModal.id)||personModal:null;
 
   return(
     <>
       {toast&&<Toast msg={toast.msg} err={toast.err}/>}
-      <div className="header">
-        <div className="header-logo">🍺 PivoTrail</div>
-        <div style={{display:'flex',alignItems:'center',gap:10}}>
-          {isReady&&(
-            <button onClick={manualSync} title="Synchronizovat"
-              style={{background:'none',border:'none',cursor:'pointer',color:syncColor,display:'flex',alignItems:'center',gap:5,fontSize:11,fontWeight:700,padding:'4px 6px',borderRadius:6,transition:'color .2s'}}>
-              <IcoSync/>{syncLabel}
-            </button>
-          )}
-          <div className="header-sub">{titles[tab]}</div>
-        </div>
+      {modalC&&<PersonModal cyclist={modalC} cyclists={cyclists} rounds={rounds} settlements={settlements} bal={bal} onClose={()=>setPersonModal(null)}/>}
+      <div className="hdr">
+        <div className="logo">🍺 PivoTrail</div>
+        {isReady&&<button onClick={manSync} style={{background:'none',border:'none',cursor:'pointer',color:sc,display:'flex',alignItems:'center',gap:5,fontSize:11,fontWeight:800,padding:'4px 8px',borderRadius:7,letterSpacing:'.04em'}}>
+          <ISync/>{sl}
+        </button>}
       </div>
-
       {!isReady&&tab!=='nastaveni'&&(
-        <div style={{background:'rgba(240,160,32,.1)',borderBottom:'1px solid rgba(240,160,32,.2)',padding:'10px 16px',fontSize:13,color:'var(--accent)',display:'flex',justifyContent:'space-between',alignItems:'center',flexShrink:0}}>
-          Nastav připojení k databázi
-          <button className="btn btn-p" style={{padding:'5px 12px',fontSize:12}} onClick={()=>setTab('nastaveni')}>Nastavení →</button>
+        <div style={{background:'var(--asoft)',borderBottom:'1px solid var(--aline)',padding:'11px 16px',fontSize:13,color:'var(--acc)',display:'flex',justifyContent:'space-between',alignItems:'center',flexShrink:0}}>
+          ☁ Nastav sdílenou databázi
+          <button className="btn btn-y" style={{padding:'5px 13px',fontSize:12}} onClick={()=>setTab('nastaveni')}>Nastavení →</button>
         </div>
       )}
-
-      <div className="content">
-        {tab==='parta'&&<PartaTab cyclists={cyclists} onChange={setCyclists}/>}
-        {tab==='runda'&&<RundaTab cyclists={cyclists} onAdd={addRound}/>}
-        {tab==='bilance'&&<BilanceTab cyclists={cyclists} rounds={rounds}/>}
-        {tab==='historie'&&<HistorieTab cyclists={cyclists} rounds={rounds} onDelete={delRound}/>}
-        {tab==='nastaveni'&&<NastaveniTab cfg={cfg} onSave={handleCfgSave}/>}
+      <div className="body">
+        {tab==='parta'    &&<PartaTab cyclists={cyclists} onChange={setCyclists} onPersonClick={setPersonModal}/>}
+        {tab==='runda'    &&<RundaTab cyclists={cyclists} onAdd={addRound}/>}
+        {tab==='bilance'  &&<BilanceTab cyclists={cyclists} rounds={rounds} settlements={settlements} onTabChange={setTab} onSettle={addSettle} onPersonClick={setPersonModal}/>}
+        {tab==='historie' &&<HistorieTab cyclists={cyclists} rounds={rounds} settlements={settlements} onDelete={delRound} onPersonClick={setPersonModal}/>}
+        {tab==='nastaveni'&&<NastaveniTab cfg={cfg} onSave={saveCfgH}/>}
       </div>
       <nav className="nav">
         {TABS.map(t=>(
-          <button key={t.k} className={`nav-btn${tab===t.k?' active':''}`} onClick={()=>setTab(t.k)}>
+          <button key={t.k} className={'nb'+(tab===t.k?' on':'')} onClick={()=>setTab(t.k)}>
             {t.ico}
-            <span className="nav-lbl">{t.lbl}</span>
+            {t.badge>0&&<span className="badge">{t.badge}</span>}
+            <span className="nl">{t.lbl}</span>
           </button>
         ))}
       </nav>
